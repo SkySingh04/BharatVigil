@@ -1,8 +1,8 @@
-# Centralized Application-Context Aware Firewall
+# BharatVigil - Centralized Application-Context Aware Firewall
 
 ## Overview
 
-This project is a centralized application-context aware firewall designed to manage and monitor network traffic for applications running on endpoint devices. The firewall allows granular control over domains, IP addresses, and protocols for each application and can be managed through a centralized web console. It also includes AI/ML capabilities to detect and alert on abnormal network behavior.
+BharatVigil is a centralized application-context aware firewall designed to manage and monitor network traffic for applications running on endpoint devices. The firewall allows granular control over domains, IP addresses, and protocols for each application and can be managed through a centralized web console. It also includes AI/ML capabilities to detect and alert on abnormal network behavior.
 
 ## Features
 
@@ -48,6 +48,25 @@ The `config.yaml` file is the core configuration file for the firewall tool. It 
 - **web_console:** Configures the web console, including port settings, access control via allowed/blocked IPs, and admin users.
 - **logging:** Manages log settings, including log level, file paths, and rotation policies.
 - **network:** Configures deep packet inspection, TLS certificate paths, and proxy settings.
+
+## Flags
+
+BharatVigil includes several flags that allow you to control its behavior when starting the tool:
+
+- **`--disable-console`**: Disable the web console. Use this flag if you want to start the tool without launching the web console.
+  ```bash
+  go run main.go --disable-console
+  ```
+
+- **`--disable-ml`**: Disable the ML model. Use this flag if you want to start the tool without launching the ML model.
+  ```bash
+  go run main.go --disable-ml
+  ```
+
+- **`--config`**: Specify the path to the configuration file. If not provided, the tool will use the default `config.yaml` in the root directory.
+  ```bash
+  go run main.go --config /path/to/config.yaml
+  ```
 
 ## ML Team Tasks
 
