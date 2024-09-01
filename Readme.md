@@ -7,8 +7,6 @@ BharatVigil is a centralized application-context aware firewall designed to mana
 ## TODO:
 - Implement blocking from config file
 - Implement parsing of all network data
-- Fix logger
-
 - Implement config file filtering from web console.
 - Implement one-click install and packaging (needs to be part of ppt like keploy)
 - Implement ML model to provide context awareness
@@ -23,29 +21,57 @@ BharatVigil is a centralized application-context aware firewall designed to mana
 - **AI/ML Integration:** Detect and alert on anomalous network behavior using AI/ML models.
 - **Cross-Platform Support:** Designed to work on both Windows and Linux endpoints.
 
-## Directory Structure
+### API Documentation
 
-```plaintext
-project-root/firewall-tool
-│
-├── cmd/                    # Cobra commands for the CLI
-│   ├── reload.go           # Command to reload the config file
-│   └── root.go             # Root command and entry point for the CLI
-│
-├── config/                 # Configuration handling
-│   └── config.go           # Go structs and methods to load and parse the config file
-│
-├── pkg/                    # Core logic for the firewall tool
-│   ├── firewall/           # Application-specific firewall logic
-│   ├── monitoring/         # Network monitoring logic
-│   ├── ai_ml/              # AI/ML integration logic
-│   └── web_console/        # Web console server logic
-│
-├── config.yaml             # Configuration file for the firewall
-├── main.go                 # Main entry point for the CLI tool
-├── README.md               # Project documentation
-└── go.mod                  # Go module file
+#### Base URL
 ```
+http://localhost:8080
+```
+
+#### Endpoints
+
+---
+
+**1. Get Current Configuration**
+
+- **URL**: `/config`
+- **Method**: `GET`
+- **Description**: Retrieves the current YAML configuration file.
+- **Response**:
+  - **200 OK**: Returns the YAML file content.
+  - **404 Not Found**: If the configuration file is not found.
+
+---
+
+**2. Update Configuration**
+
+- **URL**: `/config`
+- **Method**: `POST`
+- **Description**: Updates the YAML configuration file with new data.
+- **Request Body**:
+  - **Content-Type**: `application/json`
+  - **Body**: 
+    ```json
+    {
+      "key1": "value1",
+      "key2": "value2"
+    }
+    ```
+- **Response**:
+  - **200 OK**: Configuration updated successfully.
+  - **400 Bad Request**: Invalid request format.
+  - **500 Internal Server Error**: Failed to write the configuration file.
+
+---
+
+**3. Network Activity (Placeholder)**
+
+- **URL**: `/network-activity`
+- **Method**: `GET`
+- **Description**: Placeholder endpoint for sending network activity data.
+- **Response**:
+  - **200 OK**: Indicates network activity sending.
+
 
 ## Configuration File (`config.yaml`)
 
@@ -61,6 +87,7 @@ The `config.yaml` file is the core configuration file for the firewall tool. It 
 - **logging:** Manages log settings, including log level, file paths, and rotation policies.
 - **network:** Configures deep packet inspection, TLS certificate paths, and proxy settings.
 
+
 ## Flags
 
 BharatVigil includes several flags that allow you to control its behavior when starting the tool:
@@ -70,9 +97,19 @@ BharatVigil includes several flags that allow you to control its behavior when s
   go run main.go --disable-console
   ```
 
+- **`--disable-server`**: Disable the backend server. Use this flag if you want to start the tool without launching the backend server.
+  ```bash
+  go run main.go --disable-server
+  ```
+
 - **`--disable-ml`**: Disable the ML model. Use this flag if you want to start the tool without launching the ML model.
   ```bash
   go run main.go --disable-ml
+  ```
+
+- **`--disable-ebpf`**: Disable the eBPF program. Use this flag if you want to start the tool without loading the eBPF program.
+  ```bash
+  go run main.go --disable-ebpf
   ```
 
 - **`--config`**: Specify the path to the configuration file. If not provided, the tool will use the default `config.yaml` in the root directory.

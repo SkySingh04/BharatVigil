@@ -18,6 +18,7 @@ var (
 	disableConsole bool
 	disableMLModel bool
 	disableServer  bool
+	disableEBPF    bool
 	configPath     string // Variable to hold the path to the config file
 	currentConfig  *traffic.Config
 	logger         *zap.Logger
@@ -68,11 +69,20 @@ var rootCmd = &cobra.Command{
 			}()
 		}
 
+		// Setup eBPF if not disabled
+		if !disableEBPF {
+			traffic.Setup_bpf(logger)
+		} else {
+			logger.Info("eBPF is disabled.")
+		}
+
 		// Keep the main goroutine alive until all other goroutines have completed
 		wg.Wait()
 		logger.Info("BharatVigil tool stopped.")
 	},
 }
+
+
 
 // Execute executes the root command.
 func Execute(l *zap.Logger) {
@@ -84,11 +94,12 @@ func Execute(l *zap.Logger) {
 }
 
 func init() {
-	// Define flags for disabling web console, ML model, backend server, and setting config path
+	// Define flags for disabling web console, ML model, backend server, eBPF, and setting config path
 	rootCmd.Flags().BoolVar(&disableConsole, "disable-console", false, "Disable the web console")
 	rootCmd.Flags().BoolVar(&disableMLModel, "disable-ml", false, "Disable the ML model")
 	rootCmd.Flags().BoolVar(&disableServer, "disable-server", false, "Disable the backend server")
-	rootCmd.Flags().StringVar(&configPath, "config", "../config.yaml", "Path to the configuration file") // New config flag
+	rootCmd.Flags().BoolVar(&disableEBPF, "disable-ebpf", false, "Disable the eBPF program") // New eBPF flag
+	rootCmd.Flags().StringVar(&configPath, "config", "../config.yaml", "Path to the configuration file")
 }
 
 func startWebConsole(logger *zap.Logger) {
