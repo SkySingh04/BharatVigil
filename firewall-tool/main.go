@@ -13,6 +13,6 @@ func main() {
 		return
 	}
 
-	// Pass the logger to the root command
+	// Execute the root command to start the CLI and associated services
 	cmd.Execute(logger)
 }
