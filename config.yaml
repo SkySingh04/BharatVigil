@@ -3,7 +3,7 @@ firewall:
   rules:
     # List of firewall rules, each specific to an application
     - id: 1  # Unique identifier for the rule
-      application: "Chrome"  # Name of the application
+      application: "brave"  # Correct executable name for Brave Browser
       allowed_domains:  # Domains that the application is allowed to access
         - "google.com"
         - "example.com"

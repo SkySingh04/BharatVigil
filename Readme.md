@@ -4,6 +4,18 @@
 
 BharatVigil is a centralized application-context aware firewall designed to manage and monitor network traffic for applications running on endpoint devices. The firewall allows granular control over domains, IP addresses, and protocols for each application and can be managed through a centralized web console. It also includes AI/ML capabilities to detect and alert on abnormal network behavior.
 
+## TODO:
+- Implement blocking from config file
+- Implement parsing of all network data
+- Fix logger
+
+- Implement config file filtering from web console.
+- Implement one-click install and packaging (needs to be part of ppt like keploy)
+- Implement ML model to provide context awareness
+- Enable monitoring for all systems connected on the network in a centralized way.
+- Add Priority level for applications and add priority level for network computers.
+- Future: Add protection for sharing within networks.
+
 ## Features
 
 - **Granular Application Control:** Restrict or allow specific domains, IPs, and protocols for each application.
