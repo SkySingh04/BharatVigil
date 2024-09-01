@@ -1,8 +1,12 @@
-package config
+package traffic
 
 import (
+	"fmt"
+	"log"
 	"os"
 
+	"github.com/fsnotify/fsnotify"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/yaml.v2"
 )
 
@@ -106,4 +110,75 @@ func (c *Config) String() string {
 		return ""
 	}
 	return string(data)
+}
+
+
+func WatchConfigFile(configPath string , currentConfig *Config) {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatalf("Failed to create watcher: %v", err)
+	}
+	defer watcher.Close()
+
+	err = watcher.Add(configPath)
+	if err != nil {
+		log.Fatalf("Failed to watch config file: %v", err)
+	}
+
+	for {
+		select {
+		case event, ok := <-watcher.Events:
+			if !ok {
+				return
+			}
+			if event.Op&fsnotify.Write == fsnotify.Write {
+				fmt.Println("Config file changed, reloading...")
+
+				// Load the new config
+				newConfig, err := LoadConfig(configPath)
+				if err != nil {
+					log.Printf("Error reloading config: %v", err)
+					continue
+				}
+
+				// Log the changes
+				logConfigChanges(currentConfig, newConfig)
+
+				// Update the current config to the new one
+				currentConfig = newConfig
+
+				log.Println("Config reloaded successfully")
+				log.Println("Blocking all network traffic based on modified config...")
+				BlockNetworkTraffic(currentConfig)
+
+			}
+		case err, ok := <-watcher.Errors:
+			if !ok {
+				return
+			}
+			log.Printf("Error watching config file: %v", err)
+		}
+	}
+}
+
+func logConfigChanges(oldConfig, newConfig *Config) {
+	// Convert configs to JSON strings for comparison
+	oldConfigStr := oldConfig.String()
+	newConfigStr := newConfig.String()
+
+	// Use a diff library to show changes
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(oldConfigStr, newConfigStr, false)
+
+	// Log the differences
+	for _, diff := range diffs {
+		switch diff.Type {
+		case diffmatchpatch.DiffInsert:
+			log.Printf("Added: %s", diff.Text)
+		case diffmatchpatch.DiffDelete:
+			log.Printf("Removed: %s", diff.Text)
+		case diffmatchpatch.DiffEqual:
+			// Equal parts can be skipped or logged depending on your preference
+		}
+	}
 }

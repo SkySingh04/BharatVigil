@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"firewall-tool/config"
+	"firewall-tool/traffic"
 	"fmt"
 	"os"
 
@@ -11,7 +11,7 @@ import (
 var configFile string
 
 func reloadConfig(cmd *cobra.Command, args []string) {
-    cfg, err := config.LoadConfig(configFile)
+    cfg, err := traffic.LoadConfig(configFile)
     if err != nil {
         fmt.Println("Error loading config:", err)
         os.Exit(1)
