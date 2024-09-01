@@ -16,3 +16,4 @@ func main() {
 	// Execute the root command to start the CLI and associated services
 	cmd.Execute(logger)
 }
+

@@ -149,7 +149,7 @@ func WatchConfigFile(configPath string , currentConfig *Config) {
 
 				log.Println("Config reloaded successfully")
 				log.Println("Blocking all network traffic based on modified config...")
-				BlockNetworkTraffic(currentConfig)
+				// BlockNetworkTraffic(currentConfig)
 
 			}
 		case err, ok := <-watcher.Errors:

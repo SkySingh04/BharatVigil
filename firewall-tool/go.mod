@@ -29,6 +29,8 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
+	github.com/vishvananda/netlink v1.1.1-0.20200218174631-5f2fc868c2d0 // indirect
+	github.com/vishvananda/netns v0.0.0-20200520041808-52d707b772fe // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/arch v0.9.0 // indirect
 	golang.org/x/crypto v0.26.0 // indirect
@@ -39,6 +41,7 @@ require (
 )
 
 require (
+	github.com/dropbox/goebpf v0.0.0-20240319152541-e5e17f597ca3
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/sergi/go-diff v1.3.1
