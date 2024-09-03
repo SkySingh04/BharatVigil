@@ -19,9 +19,10 @@ func main() {
     }
 
     // Check if tshark is running
+    pcapFile := "../capture.pcap"
     if !tshark.IsTsharkRunning() {
         fmt.Println("tshark is not running. Starting...")
-        if err := tshark.StartTshark(); err != nil {
+        if err := tshark.StartTshark(pcapFile); err != nil {
             fmt.Println("Failed to start tshark:", err)
             return
         }

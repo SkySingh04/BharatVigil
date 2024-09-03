@@ -2,6 +2,7 @@ package tshark
 
 import (
     "os"
+    "fmt"
     "os/exec"
     "strings"
 )
@@ -43,8 +44,16 @@ func IsTsharkRunning() bool {
     return strings.TrimSpace(string(output)) != ""
 }
 
-func StartTshark() error {
-    cmd := exec.Command("tshark")
+func StartTshark(outputFile string) error {
+    // Create the file if it doesn't exist
+    file, err := os.OpenFile(outputFile, os.O_CREATE|os.O_WRONLY, 0644)
+    if err != nil {
+        return fmt.Errorf("failed to create file %s: %v", outputFile, err)
+    }
+    file.Close()
+
+    // Run tshark with elevated privileges if necessary
+    cmd := exec.Command("sudo", "tshark", "-F", "pcap", "-w", outputFile)
     cmd.Stdout = os.Stdout
     cmd.Stderr = os.Stderr
     return cmd.Start()
