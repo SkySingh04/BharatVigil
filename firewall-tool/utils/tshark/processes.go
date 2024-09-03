@@ -62,7 +62,7 @@ func StartTshark(outputFile string) error {
 	file.Close()
 
 	// Run tshark with elevated privileges if necessary
-	cmd := exec.Command("sudo", "tshark", "-P", "-F", "pcap", "-w", outputFile)
+	cmd := exec.Command("sudo", "tshark", "-P", "-w", outputFile)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Start()
