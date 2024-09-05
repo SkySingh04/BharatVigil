@@ -1,11 +1,17 @@
 package tshark
 
 import (
+	"bufio"
 	"fmt"
+	"net/http"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
+
+var sseChan = make(chan string)
 
 func IsTsharkInstalled() bool {
 	cmd := exec.Command("which", "tshark")
@@ -63,7 +69,43 @@ func StartTshark(outputFile string) error {
 
 	// Run tshark with elevated privileges if necessary
 	cmd := exec.Command("sudo", "tshark", "-P", "-w", outputFile)
-	cmd.Stdout = os.Stdout
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return fmt.Errorf("failed to get stdout pipe: %v", err)
+	}
 	cmd.Stderr = os.Stderr
-	return cmd.Start()
+
+	if err := cmd.Start(); err != nil {
+		return fmt.Errorf("failed to start tshark: %v", err)
+	}
+
+	go func() {
+		scanner := bufio.NewScanner(stdout)
+		for scanner.Scan() {
+			sseChan <- scanner.Text()
+		}
+		if err := scanner.Err(); err != nil {
+			fmt.Printf("error reading from stdout: %v\n", err)
+		}
+		close(sseChan)
+	}()
+
+	return nil
+}
+
+func SseHandler(c *gin.Context) {
+	flusher, ok := c.Writer.(http.Flusher)
+	if !ok {
+		c.String(http.StatusInternalServerError, "Streaming unsupported!")
+		return
+	}
+
+	c.Writer.Header().Set("Content-Type", "text/event-stream")
+	c.Writer.Header().Set("Cache-Control", "no-cache")
+	c.Writer.Header().Set("Connection", "keep-alive")
+
+	for msg := range sseChan {
+		fmt.Fprintf(c.Writer, "data: %s\n\n", msg)
+		flusher.Flush()
+	}
 }
