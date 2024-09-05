@@ -2,16 +2,62 @@ package tshark
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
 	"os/exec"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
 var sseChan = make(chan string)
+
+type TsharkData struct {
+	No          int    `json:"no"`
+	Time        string `json:"time"`
+	Source      string `json:"source"`
+	Destination string `json:"destination"`
+	Protocol    string `json:"protocol"`
+	Length      int    `json:"length"`
+	Info        string `json:"info"`
+}
+
+func parseTsharkOutput(line string) (TsharkData, error) {
+	// Example line: "980 192.669043867 140.82.112.21 → 172.20.154.99 TCP 66 443 → 48456 [ACK] Seq=3219 Ack=179353 Win=347 Len=0 TSval=3190887322 TSecr=557958221"
+	re := regexp.MustCompile(`(\d+)\s+([\d.]+)\s+([\d.:a-fA-F]+|[\w:]+)\s+→\s+([\d.:a-fA-F]+|[\w:]+)\s+(\S+)\s+(\d+)\s+(.*)`)
+	matches := re.FindStringSubmatch(line)
+	if len(matches) != 8 {
+		return TsharkData{}, fmt.Errorf("failed to parse line: %s", line)
+	}
+
+	no, err := strconv.Atoi(matches[1])
+	if err != nil {
+		return TsharkData{}, fmt.Errorf("failed to parse No: %v", err)
+	}
+	time := matches[2]
+	source := matches[3]
+	destination := matches[4]
+	protocol := matches[5]
+	length, err := strconv.Atoi(matches[6])
+	if err != nil {
+		return TsharkData{}, fmt.Errorf("failed to parse Length: %v", err)
+	}
+	info := matches[7]
+
+	return TsharkData{
+		No:          no,
+		Time:        time,
+		Source:      source,
+		Destination: destination,
+		Protocol:    protocol,
+		Length:      length,
+		Info:        info,
+	}, nil
+}
 
 func IsTsharkInstalled() bool {
 	cmd := exec.Command("which", "tshark")
@@ -82,7 +128,18 @@ func StartTshark(outputFile string) error {
 	go func() {
 		scanner := bufio.NewScanner(stdout)
 		for scanner.Scan() {
-			sseChan <- scanner.Text()
+			line := scanner.Text()
+			data, err := parseTsharkOutput(line)
+			if err != nil {
+				fmt.Printf("error parsing tshark output: %v\n", err)
+				continue
+			}
+			jsonData, err := json.Marshal(data)
+			if err != nil {
+				fmt.Printf("error marshalling json: %v\n", err)
+				continue
+			}
+			sseChan <- string(jsonData)
 		}
 		if err := scanner.Err(); err != nil {
 			fmt.Printf("error reading from stdout: %v\n", err)
