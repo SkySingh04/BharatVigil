@@ -2,108 +2,105 @@ package traffic
 
 import (
 	"fmt"
-	"log"
 	"os"
 
-	"github.com/fsnotify/fsnotify"
-	"github.com/sergi/go-diff/diffmatchpatch"
 	"gopkg.in/yaml.v2"
 )
 
 // Config represents the entire configuration structure.
 type Config struct {
-	Firewall   FirewallConfig   `yaml:"firewall"`
-	Monitoring MonitoringConfig `yaml:"monitoring"`
-	AI_ML      AI_MLConfig      `yaml:"ai_ml"`
-	Endpoints  []EndpointConfig `yaml:"endpoints"`
-	WebConsole WebConsoleConfig `yaml:"web_console"`
-	Logging    LoggingConfig    `yaml:"logging"`
-	Network    NetworkConfig    `yaml:"network"`
+	Firewall   FirewallConfig   `yaml:"firewall" json:"firewall"`
+	Monitoring MonitoringConfig `yaml:"monitoring" json:"monitoring"`
+	AI_ML      AI_MLConfig      `yaml:"ai_ml" json:"ai_ml"`
+	Endpoints  []EndpointConfig `yaml:"endpoints" json:"endpoints"`
+	WebConsole WebConsoleConfig `yaml:"web_console" json:"web_console"`
+	Logging    LoggingConfig    `yaml:"logging" json:"logging"`
+	Network    NetworkConfig    `yaml:"network" json:"network"`
 }
 
 // FirewallConfig represents the firewall rules.
 type FirewallConfig struct {
-	Rules []FirewallRule `yaml:"rules"`
+	Rules []FirewallRule `yaml:"rules" json:"rules"`
 }
 
 // FirewallRule represents a single firewall rule for an application.
 type FirewallRule struct {
-	ID              int      `yaml:"id"`
-	Application     string   `yaml:"application"`
-	AllowedDomains  []string `yaml:"allowed_domains"`
-	BlockedDomains  []string `yaml:"blocked_domains"`
-	AllowedIPs      []string `yaml:"allowed_ips"`
-	BlockedIPs      []string `yaml:"blocked_ips"`
-	Protocols       []string `yaml:"protocols"`
+	ID             int      `yaml:"id" json:"id"`
+	Application    string   `yaml:"application" json:"application"`
+	AllowedDomains []string `yaml:"allowed_domains" json:"allowed_domains"`
+	BlockedDomains []string `yaml:"blocked_domains" json:"blocked_domains"`
+	AllowedIPs     []string `yaml:"allowed_ips" json:"allowed_ips"`
+	BlockedIPs     []string `yaml:"blocked_ips" json:"blocked_ips"`
+	Protocols      []string `yaml:"protocols" json:"protocols"`
 }
 
 // MonitoringConfig represents the monitoring configuration.
 type MonitoringConfig struct {
-	Enable           bool   `yaml:"enable"`
-	LogFile          string `yaml:"log_file"`
-	AlertThresholds  AlertThresholds `yaml:"alert_thresholds"`
+	Enable          bool            `yaml:"enable" json:"enable"`
+	LogFile         string          `yaml:"log_file" json:"log_file"`
+	AlertThresholds AlertThresholds `yaml:"alert_thresholds" json:"alert_thresholds"`
 }
 
 // AlertThresholds represents the thresholds for generating alerts.
 type AlertThresholds struct {
-	AbnormalTraffic  int `yaml:"abnormal_traffic"`
-	BlockedAttempts  int `yaml:"blocked_attempts"`
+	AbnormalTraffic int `yaml:"abnormal_traffic" json:"abnormal_traffic"`
+	BlockedAttempts int `yaml:"blocked_attempts" json:"blocked_attempts"`
 }
 
 // AI_MLConfig represents the AI/ML configuration.
 type AI_MLConfig struct {
-	ModelEndpoint        string `yaml:"model_endpoint"`
-	EnableAnomalyDetection bool   `yaml:"enable_anomaly_detection"`
+	ModelEndpoint          string `yaml:"model_endpoint" json:"model_endpoint"`
+	EnableAnomalyDetection bool   `yaml:"enable_anomaly_detection" json:"enable_anomaly_detection"`
 }
 
 // EndpointConfig represents a single endpoint configuration.
 type EndpointConfig struct {
-	ID        string `yaml:"id"`
-	OS        string `yaml:"os"`
-	IPAddress string `yaml:"ip_address"`
-	Hostname  string `yaml:"hostname"`
+	ID        string `yaml:"id" json:"id"`
+	OS        string `yaml:"os" json:"os"`
+	IPAddress string `yaml:"ip_address" json:"ip_address"`
+	Hostname  string `yaml:"hostname" json:"hostname"`
 }
 
 // WebConsoleConfig represents the configuration for the web console.
 type WebConsoleConfig struct {
-	Port         int      `yaml:"port"`
-	AllowedIPs   []string `yaml:"allowed_ips"`
-	BlockedIPs   []string `yaml:"blocked_ips"`
-	AdminUsers   []string `yaml:"admin_users"`
+	Port       int      `yaml:"port" json:"port"`
+	AllowedIPs []string `yaml:"allowed_ips" json:"allowed_ips"`
+	BlockedIPs []string `yaml:"blocked_ips" json:"blocked_ips"`
+	AdminUsers []string `yaml:"admin_users" json:"admin_users"`
 }
 
 // LoggingConfig represents the logging configuration.
 type LoggingConfig struct {
-	LogLevel   string `yaml:"log_level"`
-	LogFile    string `yaml:"log_file"`
-	MaxSize    int    `yaml:"max_size"`
-	MaxBackups int    `yaml:"max_backups"`
-	MaxAge     int    `yaml:"max_age"`
+	LogLevel   string `yaml:"log_level" json:"log_level"`
+	LogFile    string `yaml:"log_file" json:"log_file"`
+	MaxSize    int    `yaml:"max_size" json:"max_size"`
+	MaxBackups int    `yaml:"max_backups" json:"max_backups"`
+	MaxAge     int    `yaml:"max_age" json:"max_age"`
 }
 
 // NetworkConfig represents the network-related settings.
 type NetworkConfig struct {
-	EnableDeepPacketInspection bool   `yaml:"enable_deep_packet_inspection"`
-	SelfSignedTLSCert          string `yaml:"self_signed_tls_cert"`
-	ProxyEnabled               bool   `yaml:"proxy_enabled"`
+	EnableDeepPacketInspection bool   `yaml:"enable_deep_packet_inspection" json:"enable_deep_packet_inspection"`
+	SelfSignedTLSCert          string `yaml:"self_signed_tls_cert" json:"self_signed_tls_cert"`
+	ProxyEnabled               bool   `yaml:"proxy_enabled" json:"proxy_enabled"`
 }
 
-// LoadConfig loads the configuration from a YAML file
+// LoadConfig loads the configuration from a YAML file.
 func LoadConfig(configPath string) (*Config, error) {
 	file, err := os.ReadFile(configPath)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read config file: %w", err)
 	}
 
 	var cfg Config
 	if err := yaml.Unmarshal(file, &cfg); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal YAML: %w", err)
 	}
 
 	return &cfg, nil
 }
 
-// String converts the Config to a YAML string for easy comparison
+// String converts the Config to a YAML string for easy comparison.
 func (c *Config) String() string {
 	data, err := yaml.Marshal(c)
 	if err != nil {
@@ -112,73 +109,40 @@ func (c *Config) String() string {
 	return string(data)
 }
 
-
-func WatchConfigFile(configPath string , currentConfig *Config) {
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		log.Fatalf("Failed to create watcher: %v", err)
-	}
-	defer watcher.Close()
-
-	err = watcher.Add(configPath)
-	if err != nil {
-		log.Fatalf("Failed to watch config file: %v", err)
-	}
-
-	for {
-		select {
-		case event, ok := <-watcher.Events:
-			if !ok {
-				return
-			}
-			if event.Op&fsnotify.Write == fsnotify.Write {
-				fmt.Println("Config file changed, reloading...")
-
-				// Load the new config
-				newConfig, err := LoadConfig(configPath)
-				if err != nil {
-					log.Printf("Error reloading config: %v", err)
-					continue
-				}
-
-				// Log the changes
-				logConfigChanges(currentConfig, newConfig)
-
-				// Update the current config to the new one
-				currentConfig = newConfig
-
-				log.Println("Config reloaded successfully")
-				log.Println("Blocking all network traffic based on modified config...")
-				// BlockNetworkTraffic(currentConfig)
-
-			}
-		case err, ok := <-watcher.Errors:
-			if !ok {
-				return
-			}
-			log.Printf("Error watching config file: %v", err)
-		}
-	}
+// IsZeroValue checks if the WebConsoleConfig is zero-valued.
+func (wc WebConsoleConfig) IsZeroValue() bool {
+	return len(wc.AllowedIPs) == 0 &&
+		len(wc.BlockedIPs) == 0 &&
+		wc.Port == 0 &&
+		len(wc.AdminUsers) == 0
 }
 
-func logConfigChanges(oldConfig, newConfig *Config) {
-	// Convert configs to JSON strings for comparison
-	oldConfigStr := oldConfig.String()
-	newConfigStr := newConfig.String()
+// IsZeroValue checks if the LoggingConfig is zero-valued.
+func (lc LoggingConfig) IsZeroValue() bool {
+	return lc.LogLevel == "" &&
+		lc.LogFile == "" &&
+		lc.MaxSize == 0 &&
+		lc.MaxBackups == 0 &&
+		lc.MaxAge == 0
+}
 
-	// Use a diff library to show changes
-	dmp := diffmatchpatch.New()
-	diffs := dmp.DiffMain(oldConfigStr, newConfigStr, false)
+// IsZeroValue checks if the NetworkConfig is zero-valued.
+func (nc NetworkConfig) IsZeroValue() bool {
+	return !nc.EnableDeepPacketInspection &&
+		nc.SelfSignedTLSCert == "" &&
+		!nc.ProxyEnabled
+}
 
-	// Log the differences
-	for _, diff := range diffs {
-		switch diff.Type {
-		case diffmatchpatch.DiffInsert:
-			log.Printf("Added: %s", diff.Text)
-		case diffmatchpatch.DiffDelete:
-			log.Printf("Removed: %s", diff.Text)
-		case diffmatchpatch.DiffEqual:
-			// Equal parts can be skipped or logged depending on your preference
-		}
-	}
+// IsZeroValue checks if the MonitoringConfig is zero-valued.
+func (mc MonitoringConfig) IsZeroValue() bool {
+	return !mc.Enable &&
+		mc.LogFile == "" &&
+		mc.AlertThresholds.AbnormalTraffic == 0 &&
+		mc.AlertThresholds.BlockedAttempts == 0
+}
+
+// IsZeroValue checks if the AI_MLConfig is zero-valued.
+func (amc AI_MLConfig) IsZeroValue() bool {
+	return amc.ModelEndpoint == "" &&
+		!amc.EnableAnomalyDetection
 }
