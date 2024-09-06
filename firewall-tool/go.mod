@@ -5,6 +5,7 @@ go 1.22.0
 require (
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
+	github.com/mattn/go-sqlite3 v1.14.23
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/zap v1.27.0
 	gopkg.in/yaml.v2 v2.4.0
