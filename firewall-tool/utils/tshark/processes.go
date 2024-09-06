@@ -2,6 +2,7 @@ package tshark
 
 import (
 	"bufio"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var sseChan = make(chan string)
@@ -27,7 +29,6 @@ type TsharkData struct {
 }
 
 func parseTsharkOutput(line string) (TsharkData, error) {
-	// Example line: "980 192.669043867 140.82.112.21 → 172.20.154.99 TCP 66 443 → 48456 [ACK] Seq=3219 Ack=179353 Win=347 Len=0 TSval=3190887322 TSecr=557958221"
 	re := regexp.MustCompile(`(\d+)\s+([\d.]+)\s+([\d.:a-fA-F]+|[\w:]+)\s+→\s+([\d.:a-fA-F]+|[\w:]+)\s+(\S+)\s+(\d+)\s+(.*)`)
 	matches := re.FindStringSubmatch(line)
 	if len(matches) != 8 {
@@ -76,15 +77,13 @@ func InstallTshark() error {
 }
 
 func getPkgManager() string {
-	// Determine the package manager based on the OS
-	// For simplicity, assuming Linux with apt-get or yum
 	if _, err := exec.LookPath("apt-get"); err == nil {
 		return "sudo apt-get"
 	}
 	if _, err := exec.LookPath("yum"); err == nil {
 		return "sudo yum"
 	}
-	return "sudo apt-get" // Default to apt-get if no other package manager is found
+	return "sudo apt-get"
 }
 
 func IsTsharkRunning() bool {
@@ -97,23 +96,19 @@ func IsTsharkRunning() bool {
 }
 
 func StartTshark(outputFile string) error {
-	// Check if the output file already exists, if it exists, delete it
 	if _, err := os.Stat(outputFile); err == nil {
 		if err := os.Remove(outputFile); err != nil {
 			return fmt.Errorf("failed to remove existing file %s: %v", outputFile, err)
-		} else {
-			fmt.Printf("removed existing file %s\n", outputFile)
 		}
+		fmt.Printf("removed existing file %s\n", outputFile)
 	}
 
-	// Create the file if it doesn't exist
 	file, err := os.OpenFile(outputFile, os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("failed to create file %s: %v", outputFile, err)
 	}
 	file.Close()
 
-	// Run tshark with elevated privileges if necessary
 	cmd := exec.Command("sudo", "tshark", "-P", "-w", outputFile)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
@@ -140,6 +135,12 @@ func StartTshark(outputFile string) error {
 				continue
 			}
 			sseChan <- string(jsonData)
+
+			// Insert data into the database
+			dbFile := "firewall.db"
+			if err := InsertTsharkData(dbFile, data); err != nil {
+				fmt.Printf("Failed to insert data into the database: %v\n", err)
+			}
 		}
 		if err := scanner.Err(); err != nil {
 			fmt.Printf("error reading from stdout: %v\n", err)
@@ -165,4 +166,34 @@ func SseHandler(c *gin.Context) {
 		fmt.Fprintf(c.Writer, "data: %s\n\n", msg)
 		flusher.Flush()
 	}
+}
+
+func InsertTsharkData(dbFile string, data TsharkData) error {
+	db, err := sql.Open("sqlite3", dbFile)
+	if err != nil {
+		return fmt.Errorf("failed to open database: %v", err)
+	}
+	defer db.Close()
+
+	createTableSQL := `CREATE TABLE IF NOT EXISTS requests (
+        no INTEGER PRIMARY KEY,
+        time TEXT,
+        source TEXT,
+        destination TEXT,
+        protocol TEXT,
+        length INTEGER,
+        info TEXT
+    );`
+	_, err = db.Exec(createTableSQL)
+	if err != nil {
+		return fmt.Errorf("failed to create table: %v", err)
+	}
+
+	insertSQL := `INSERT INTO requests (no, time, source, destination, protocol, length, info) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err = db.Exec(insertSQL, data.No, data.Time, data.Source, data.Destination, data.Protocol, data.Length, data.Info)
+	if err != nil {
+		return fmt.Errorf("failed to insert data: %v", err)
+	}
+
+	return nil
 }
