@@ -1,6 +1,10 @@
 package server
 
 import (
+	"firewall-tool/traffic"
+	"firewall-tool/utils/db"
+	"firewall-tool/utils/tshark"
+
 	"bytes"
 	"encoding/json"
 	"firewall-tool/traffic"
@@ -33,6 +37,10 @@ func StartServer(logger *zap.Logger) {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
+
+	r.GET("/healthz", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
 
 	// Endpoint to get the current YAML configuration
 	r.GET("/config", func(c *gin.Context) {
@@ -68,6 +76,7 @@ func StartServer(logger *zap.Logger) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
 			return
 		}
+
 		logger.Info("New config", zap.Any("config", newConfig))
 
 		// Load the current YAML configuration from file
@@ -125,6 +134,7 @@ func StartServer(logger *zap.Logger) {
 
 		// Write the updated config back to the file
 		err = os.WriteFile(configPath, updatedConfigData, 0644)
+
 		if err != nil {
 			logger.Error("Failed to write config file", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update config"})
@@ -135,11 +145,17 @@ func StartServer(logger *zap.Logger) {
 		c.JSON(http.StatusOK, gin.H{"status": "Config updated"})
 	})
 
-	// Placeholder for network activity endpoints
-	r.GET("/network-activity", func(c *gin.Context) {
-		// Implement the network activity logic here
-		logger.Info("Sending network activity")
-		c.JSON(http.StatusOK, gin.H{"status": "Network activity sent"})
+	r.GET("/events", tshark.SseHandler)
+
+	r.GET("/requests", func(c *gin.Context) {
+		requests, err := db.GetAllRequests()
+		if err != nil {
+			logger.Error("Failed to get requests", zap.Error(err))
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get requests"})
+			return
+		}
+
+		c.JSON(http.StatusOK, requests)
 	})
 
 	// Start the server
