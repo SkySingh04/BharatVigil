@@ -8,7 +8,6 @@ import (
 	"go.uber.org/zap"
 )
 
-
 func Setup_bpf(logger *zap.Logger) {
 	logger.Info("Initializing eBPF setup...")
 
@@ -75,7 +74,6 @@ func Setup_bpf(logger *zap.Logger) {
 	logger.Info("eBPF Program loaded successfully into the Kernel. Press CTRL+C to stop.")
 	<-ctrlC
 }
-
 
 // The Function That adds the IPs to the blacklist map
 func BlockIPAddress(ipAddreses []string, blacklist goebpf.Map) error {
