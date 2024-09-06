@@ -2,6 +2,7 @@ package server
 
 import (
 	"firewall-tool/traffic"
+	"firewall-tool/utils/db"
 	"firewall-tool/utils/tshark"
 	"net/http"
 	"os"
@@ -72,6 +73,17 @@ func StartServer(logger *zap.Logger) {
 
 	// Placeholder for network activity endpoints
 	r.GET("/events", tshark.SseHandler)
+
+	r.GET("/requests", func(c *gin.Context) {
+		requests, err := db.GetAllRequests()
+		if err != nil {
+			logger.Error("Failed to get requests", zap.Error(err))
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get requests"})
+			return
+		}
+
+		c.JSON(http.StatusOK, requests)
+	})
 
 	// Start the server
 	if err := r.Run(":8080"); err != nil {
