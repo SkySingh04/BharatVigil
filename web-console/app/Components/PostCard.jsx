@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -131,64 +132,6 @@ const PostCard = ({
     return (
         <div className="bg-black text-white rounded-lg p-4 m-4 shadow-lg border border-white border-opacity-20 border-[1px] relative">
             {isEditing ? (
-                
-                // <div>
-                //     <label className="block mb-1 text-white">Application</label>
-                //     <input
-                //         type="text"
-                //         name="application"
-                //         value={formData.application}
-                //         onChange={handleInputChange}
-                //         className="p-2 mb-4 input input-bordered input-neutral w-full max-w-xs"
-                //     />
-
-                //     <label className="block mb-1 text-white">Allowed Domains</label>
-                //     <textarea
-                //         name="allowedDomains"
-                //         value={formData.allowedDomains}
-                //         onChange={handleInputChange}
-                //         className="p-2 mb-4 input input-bordered input-neutral w-full max-w-xs"
-                //     />
-
-                //     <label className="block mb-1 text-white">Blocked Domains</label>
-                //     <textarea
-                //         name="blockedDomains"
-                //         value={formData.blockedDomains}
-                //         onChange={handleInputChange}
-                //         className="p-2 mb-4 input input-bordered input-neutral w-full max-w-xs"
-                //     />
-
-                //     <label className="block mb-1 text-white">Allowed IPs</label>
-                //     <textarea
-                //         name="allowedIps"
-                //         value={formData.allowedIps}
-                //         onChange={handleInputChange}
-                //         className="p-2 mb-4 input input-bordered input-neutral w-full max-w-xs"
-                //     />
-
-                //     <label className="block mb-1 text-white">Blocked IPs</label>
-                //     <textarea
-                //         name="blockedIps"
-                //         value={formData.blockedIps}
-                //         onChange={handleInputChange}
-                //         className="p-2 mb-4 input input-bordered input-neutral w-full max-w-xs"
-                //     />
-
-                //     <label className="block mb-1 text-white">Protocols</label>
-                //     <textarea
-                //         name="protocols"
-                //         value={formData.protocols}
-                //         onChange={handleInputChange}
-                //         className="p-2 mb-4 input input-bordered input-neutral w-full max-w-xs"
-                //     />
-
-                //     <button
-                //         onClick={handleSave}
-                //         className="rounded absolute bottom-2 right-2 btn btn-info btn-outline"
-                //     >
-                //         Save
-                //     </button>
-                //     </div>
                 <div>
                 <ul className="menu bg-base-200 rounded-box w-100 max-w-xs">
                     <li>
