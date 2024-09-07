@@ -40,7 +40,7 @@ const DashBoard = () => {
       }
       const data = await response.json();
       setRequests(data);
-      setLoadingRequests(false); // Stop loading after receiving data
+      setLoadingRequests(false); 
     } catch (error) {
       console.error("Error fetching requests:", error);
       setLoadingRequests(false); // Stop loading on error
