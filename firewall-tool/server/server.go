@@ -7,7 +7,8 @@ import (
 
 	"bytes"
 	"encoding/json"
-	"firewall-tool/traffic"
+
+	//"firewall-tool/traffic"
 	"io"
 	"net/http"
 	"os"

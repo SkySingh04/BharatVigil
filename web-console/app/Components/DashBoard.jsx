@@ -117,6 +117,20 @@ const DashBoard = () => {
                 </svg>
               </label>
             </div>
+            <div className="menu bg-base-200 rounded-box w-100 mb-4">
+            {['Microsoft Edge', 'Portmaster Core Service', 'System DNS Client', 'Firefox'].map((app, index) => (
+              <li key={index} className="p-4 bg-gray-900 rounded-lg mb-2">
+                <div className="flex justify-between items-center">
+                  <img src="/path-to-your-icon.png" alt="App Icon" className="w-8 h-8 mr-3" />
+                  <span className="text-lg font-semibold">{app}</span>
+                  <div className="radial-progress bg-primary text-primary-content border-primary border-2" style={{ "--value": 50 }} role="progressbar">
+                    50%
+                  </div>
+                </div>
+              </li>
+            ))}
+          </div>
+
 
             {/* Connections Information */}
             <div className="mt-4 grid grid-cols-1 gap-4">
@@ -158,11 +172,11 @@ const DashBoard = () => {
 
       {/* Right Section */}
       <div className="col-span-1 bg-black p-4 flex flex-col items-center border-l border-white">
-        <h2 className="text-white mb-4">Requests</h2>
+        <strong className="text-white mb-4">Requests</strong>
 
         {/* Refresh Button */}
         <button
-          className="text-white mb-4 bg-blue-500 px-4 py-2 rounded hover:bg-blue-700"
+          className="btn btn-info btn-outline"
           onClick={handleRefresh}
         >
           Refresh Requests
@@ -170,26 +184,57 @@ const DashBoard = () => {
 
         {/* Loading state */}
         {loadingRequests ? (
-          <div className="text-white">Loading requests...</div>
-        ) : requests.length > 0 ? (
-          <ul className="w-full space-y-2">
-            {requests.map((request) => (
-              <li
-                key={request.no} // Ensure you use a unique key like `request.no` which is the primary key in your database
-                className="p-4 bg-gray-900 rounded-lg border border-white">
-                <p><strong>Request ID:</strong> {request.no}</p>
-                <p><strong>Time:</strong> {request.time}</p>
-                <p><strong>Source:</strong> {request.source}</p>
-                <p><strong>Destination:</strong> {request.destination}</p>
-                <p><strong>Protocol:</strong> {request.protocol}</p>
-                <p><strong>Length:</strong> {request.length}</p>
-                <p><strong>Info:</strong> {request.info}</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="text-white">No requests found.</div>
-        )}
+        <div className="text-white loading loading-infinity loading-lg">Loading requests</div>
+        
+          ) : requests.length > 0 ? (
+            <ul className="menu bg-base-200 rounded-box w-100">
+              {requests.map((request) => (
+                <li key={request.no} className="p-4 bg-gray-900 rounded-lg border border-white">
+                  <div className="flex items-start">
+                    <img src="/path-to-your-icon.png" alt="Icon" className="w-8 h-8 mr-3" />
+                    <div>
+                      <h3 className="text-lg font-semibold">Request {request.no}</h3>
+                      <ul className="menu bg-base-200 rounded-box w-full max-w-xs">
+                        <li>
+                          <a className="text-sm mt-2">
+                            <strong>Time:</strong> {request.time}
+                          </a>
+                        </li>
+                        <li>
+                          <a className="text-sm mt-2">
+                            <strong>Source:</strong> {request.source}
+                          </a>
+                        </li>
+                        <li>
+                          <a className="text-sm mt-2">
+                            <strong>Destination:</strong> {request.destination}
+                          </a>
+                        </li>
+                        <li>
+                          <a className="text-sm mt-2">
+                            <strong>Protocol:</strong> {request.protocol}
+                          </a>
+                        </li>
+                        <li>
+                          <a className="text-sm mt-2">
+                            <strong>Length:</strong> {request.length}
+                          </a>
+                        </li>
+                        <li>
+                          <a className="text-sm mt-2">
+                            <strong>Info:</strong> {request.info}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-white">No requests found.</div>
+          )}
+
       </div>
     </div>
   );

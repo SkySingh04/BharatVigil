@@ -1,77 +1,74 @@
-# Firewall Configuration
 firewall:
   rules:
-    # List of firewall rules, each specific to an application
-    - id: 1  # Unique identifier for the rule
-      application: "brave"  # Correct executable name for Brave Browser
-      allowed_domains:  # Domains that the application is allowed to access
-        - "google.com"
-        - "example.com"
-      blocked_domains:  # Domains that the application is blocked from accessing
-        - "shady.com"
-      allowed_ips:  # IP addresses that the application is allowed to communicate with
-        - "192.168.1.1"
-      blocked_ips:  # IP addresses that the application is blocked from communicating with
-        - "10.0.0.1"
-      protocols:  # Network protocols that the application is allowed to use
-        - "TCP"
-        - "UDP"
-
-    - id: 2  # Unique identifier for the rule
-      application: "VSCode"  # Name of the application
-      allowed_domains:  # Domains that the application is allowed to access
-        - "microsoft.com"
-      blocked_domains: []  # Empty list means no domains are blocked
-      allowed_ips: []  # Empty list means no IPs are specifically allowed
-      blocked_ips: []  # Empty list means no IPs are specifically blocked
-      protocols:  # Network protocols that the application is allowed to use
-        - "TCP"
-
-# Monitoring Configuration
+  - id: 1
+    application: brave
+    allowed_domains:
+    - google.com
+    - example.com
+    blocked_domains:
+    - shady.com
+    allowed_ips:
+    - 192.168.1.1
+    blocked_ips:
+    - 10.0.0.1
+    protocols:
+    - TCP
+    - UDP
+  - id: 2
+    application: VSCode
+    allowed_domains:
+    - microsoft.com
+    blocked_domains: []
+    allowed_ips: []
+    blocked_ips: []
+    protocols:
+    - TCP
+  - id: 0
+    application: brave
+    allowed_domains:
+    - google.com
+    - example.com
+    blocked_domains:
+    - shady.com
+    allowed_ips:
+    - 192.168.1.1
+    blocked_ips:
+    - 10.0.0.1
+    protocols:
+    - TCP
+    - UDP
 monitoring:
-  enable: true  # Enable or disable network traffic monitoring
-  log_file: "/var/log/firewall-monitor.log"  # Path to the log file for network activity
+  enable: true
+  log_file: /var/log/firewall-monitor.log
   alert_thresholds:
-    abnormal_traffic: 1000  # Threshold for alerting on abnormal traffic (in packets/second)
-    blocked_attempts: 10  # Threshold for alerting on blocked access attempts
-
-# AI/ML Configuration
+    abnormal_traffic: 1000
+    blocked_attempts: 10
 ai_ml:
-  model_endpoint: "http://localhost:5000/predict"  # URL of the AI/ML model endpoint for anomaly detection
-  enable_anomaly_detection: true  # Enable or disable AI/ML-based anomaly detection
-
-# Endpoint Configuration
+  model_endpoint: http://localhost:5000/predict
+  enable_anomaly_detection: true
 endpoints:
-  # List of endpoints where the firewall agent is deployed
-  - id: "endpoint-1"  # Unique identifier for the endpoint
-    os: "Windows"  # Operating system of the endpoint
-    ip_address: "192.168.1.100"  # IP address of the endpoint
-    hostname: "endpoint1.local"  # Hostname of the endpoint
-
-  - id: "endpoint-2"  # Unique identifier for the endpoint
-    os: "Linux"  # Operating system of the endpoint
-    ip_address: "192.168.1.101"  # IP address of the endpoint
-    hostname: "endpoint2.local"  # Hostname of the endpoint
-
-# Web Console Configuration
+- id: endpoint-1
+  os: Windows
+  ip_address: 192.168.1.100
+  hostname: endpoint1.local
+- id: endpoint-2
+  os: Linux
+  ip_address: 192.168.1.101
+  hostname: endpoint2.local
 web_console:
-  port: 8080  # Port on which the web console will run
-  allowed_ips:  # List of IPs allowed to access the web console
-    - "192.168.1.1"
-  blocked_ips: []  # List of IPs blocked from accessing the web console
-  admin_users:  # List of admin users with access to the web console
-    - "admin"
-
-# Logging Configuration
+  port: 8080
+  allowed_ips:
+  - 192.168.1.1
+  blocked_ips: []
+  admin_users:
+  - admin
 logging:
-  log_level: "info"  # Log level (e.g., info, debug, error)
-  log_file: "/var/log/firewall-tool.log"  # Path to the main log file
-  max_size: 100  # Maximum size of the log file before rotation (in MB)
-  max_backups: 3  # Maximum number of backup files to keep
-  max_age: 30  # Maximum age of the log files before deletion (in days)
-
-# Network Configuration
+  log_level: info
+  log_file: /var/log/firewall-tool.log
+  max_size: 100
+  max_backups: 3
+  max_age: 30
 network:
-  enable_deep_packet_inspection: true  # Enable or disable deep packet inspection for network traffic
-  self_signed_tls_cert: "/path/to/self-signed-cert.pem"  # Path to the self-signed TLS certificate for secure communication
-  proxy_enabled: true  # Enable or disable a proxy for inspecting TLS traffic
+  enable_deep_packet_inspection: true
+  self_signed_tls_cert: /path/to/self-signed-cert.pem
+  proxy_enabled: true
