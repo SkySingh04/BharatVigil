@@ -117,44 +117,73 @@ const DashBoard = () => {
                 </svg>
               </label>
             </div>
-            <div className="menu bg-base-200 rounded-box w-100 mb-4">
-            {['Microsoft Edge', 'Portmaster Core Service', 'System DNS Client', 'Firefox'].map((app, index) => (
-              <li key={index} className="p-4 bg-gray-900 rounded-lg mb-2">
-                <div className="flex justify-between items-center">
-                  <img src="/path-to-your-icon.png" alt="App Icon" className="w-8 h-8 mr-3" />
-                  <span className="text-lg font-semibold">{app}</span>
-                  <div className="radial-progress bg-primary text-primary-content border-primary border-2" style={{ "--value": 50 }} role="progressbar">
-                    50%
-                  </div>
-                </div>
-              </li>
-            ))}
-          </div>
+            <div className="menu bg-base-200 rounded-box w-100 mb-4 overflow-y-auto h-80 border border-white border-opacity-20">
+              <ul>
+                {['Microsoft Edge', 'Portmaster Core Service', 'System DNS Client', 'Firefox'].map((app, index) => (
+                  <li key={index} className="p-4 bg-base-100 rounded-lg mb-2 border border-white border-opacity-20">
+                    <div className="flex justify-between items-center">
+                      <img src="/path-to-your-icon.png" alt="App Icon" className="w-8 h-8 mr-3" />
+                      <span className="text-lg font-semibold">{app}</span>
+                      <div className="radial-progress bg-primary text-primary-content border-primary border-2" style={{ "--value": 50 }} role="progressbar">
+                        50%
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
 
 
             {/* Connections Information */}
-            <div className="mt-4 grid grid-cols-1 gap-4">
-              {[
-                { country: "Canada", ip: "78.138.17.182", connections: 2, hops: 2 },
-                { country: "USA", ip: "5.34.178.198", connections: 45, hops: 2 },
-                { country: "France", ip: "141.95.158.73", connections: 6, hops: 2 },
-                { country: "Germany", ip: "138.201.140.70", connections: 184, hops: 2 },
-              ].map((data, index) => (
-                <div key={index} className="bg-gray-900 p-4 border border-white rounded">
-                  <div className="text-sm">{data.country}</div>
-                  <div className="text-lg font-semibold">{data.ip}</div>
-                  <div className="text-sm">
-                    {data.connections} Connections, HOPS: {data.hops}
-                  </div>
-                </div>
-              ))}
+            <div className="menu bg-base-200 rounded-box w-100 mt-4 border border-white border-opacity-20">
+              <div className="h-64 overflow-y-auto">
+                <ul className="grid grid-cols-1 gap-4">
+                  {[
+                    { country: "Canada", ip: "78.138.17.182", connections: 2, hops: 2 },
+                    { country: "USA", ip: "5.34.178.198", connections: 45, hops: 2 },
+                    { country: "France", ip: "141.95.158.73", connections: 6, hops: 2 },
+                    { country: "Germany", ip: "138.201.140.70", connections: 184, hops: 2 },
+                  ].map((data, index) => (
+                    <li key={index} className="p-4 bg-base-100 rounded-lg border border-white border-opacity-20">
+                      <div className="flex items-start">
+                        <img src="/path-to-your-icon.png" alt="Country Icon" className="w-8 h-8 mr-3" />
+                        <div>
+                          <h3 className="text-lg font-semibold">{data.ip}</h3>
+                          <ul className="menu bg-base-200 rounded-box w-full max-w-xs">
+                            <li>
+                              <a className="text-sm mt-2">
+                                <strong>Country:</strong> {data.country}
+                              </a>
+                            </li>
+                            <li>
+                              <a className="text-sm mt-2">
+                                <strong>Connections:</strong> {data.connections}
+                              </a>
+                            </li>
+                            <li>
+                              <a className="text-sm mt-2">
+                                <strong>HOPS:</strong> {data.hops}
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
+
+
+
           </div>
         </div>
       </div>
 
       {/* Middle Section */}
-      <div className="col-span-1 p-6 flex flex-col items-center bg-black">
+      <div className="col-span-1 p-6 flex flex-col items-center bg-black ">
+      <div className="h-[75vh] overflow-y-auto  rounded-box border border-white border-opacity-20">
         <div className="w-full space-y-4">
           {rules.map((rule) => (
             <PostCard
@@ -169,9 +198,10 @@ const DashBoard = () => {
           ))}
         </div>
       </div>
+      </div>
 
       {/* Right Section */}
-      <div className="col-span-1 bg-black p-4 flex flex-col items-center border-l border-white">
+      <div className="col-span-1 bg-black p-4 flex flex-col items-center border-l border-white border-opacity-20">
         <strong className="text-white mb-4">Requests</strong>
 
         {/* Refresh Button */}
@@ -187,14 +217,14 @@ const DashBoard = () => {
         <div className="text-white loading loading-infinity loading-lg">Loading requests</div>
         
           ) : requests.length > 0 ? (
-            <ul className="menu bg-base-200 rounded-box w-100">
+            <ul className="menu bg-base-200 rounded-box w-100 gap-4 overflow-y-auto h-[75vh] border border-white border-opacity-20">
               {requests.map((request) => (
-                <li key={request.no} className="p-4 bg-gray-900 rounded-lg border border-white">
+                <li key={request.no} className="p-4 bg-base-100 rounded-lg border border-white border-opacity-20">
                   <div className="flex items-start">
                     <img src="/path-to-your-icon.png" alt="Icon" className="w-8 h-8 mr-3" />
                     <div>
                       <h3 className="text-lg font-semibold">Request {request.no}</h3>
-                      <ul className="menu bg-base-200 rounded-box w-full max-w-xs">
+                      <ul className="menu bg-base-200 rounded-box w-full max-w-xs border border-white border-opacity-20">
                         <li>
                           <a className="text-sm mt-2">
                             <strong>Time:</strong> {request.time}
