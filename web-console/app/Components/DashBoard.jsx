@@ -1,11 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import PostCard from "./PostCard";
+import MonitoringCard from "./MonitoringCard";
+import AiMlCard from "./AiMlCard";
+import LoggingCard from "./LoggingCard";
+
 import yaml from "js-yaml";
 import { FaBell, FaExclamationTriangle, FaCog, FaSignOutAlt } from "react-icons/fa";
 
 const DashBoard = () => {
   const [rules, setRules] = useState([]);
+  const [monitoring, setMonitoring] = useState({}); // State for monitoring configuration
+  const [AiMl, setAiMl] = useState({}); // State for AI/ML configuration
+  const[logging, setLogging] = useState({}); // State for logging configuration
+  const[endpoints, setEndpoints] = useState([]); // State for endpoints
   const [requests, setRequests] = useState([]); // State for requests
   const [loadingRequests, setLoadingRequests] = useState(true); // Loading state for requests
 
@@ -28,6 +36,96 @@ const DashBoard = () => {
       }
     };
 
+    fetchConfig();
+  }, []);
+
+  //Fetch monitoring data from backend
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/config");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const yamlText = await response.text();
+        const data = yaml.load(yamlText);
+  
+        // Access monitoring configuration from fetched data
+        const monitoringConfig = data.monitoring || {};
+        setMonitoring(monitoringConfig);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+  
+    fetchConfig();
+  }, []);
+
+  // Fetch AI/ML data from backend
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/config");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const yamlText = await response.text();
+        const data = yaml.load(yamlText);
+  
+        // Access monitoring configuration from fetched data
+        const AiMlConfig = data.ai_ml || {};
+        setAiMl(AiMlConfig);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+  
+    fetchConfig();
+  }, []);
+
+  // Fetch logging data from backend
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/config");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const yamlText = await response.text();
+        const data = yaml.load(yamlText);
+  
+        // Access logging configuration from fetched data
+        const loggingConfig = data.logging || {};
+        console.log("Fetched logging config:", loggingConfig); // Debug log
+        setLogging(loggingConfig);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+  
+    fetchConfig();
+  }, []);
+
+  //Fetch Endpoint data from backend
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/config");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const yamlText = await response.text();
+        const data = yaml.load(yamlText);
+  
+        // Access logging configuration from fetched data
+        const endpointsConfig = data.endpoints || {};
+        console.log("Fetched logging config:", endpointsConfig); // Debug log
+        setEndpoints(endpointsConfig);
+      } catch (error) {
+        console.error("Error fetching config:", error);
+      }
+    };
+  
     fetchConfig();
   }, []);
 
@@ -183,22 +281,45 @@ const DashBoard = () => {
 
       {/* Middle Section */}
       <div className="col-span-1 p-6 flex flex-col items-center bg-black ">
-      <div className="h-[75vh] overflow-y-auto  rounded-box border border-white border-opacity-20">
-        <div className="w-full space-y-4">
-          {rules.map((rule) => (
-            <PostCard
-              key={rule.id}
-              application={rule.application}
-              allowedDomains={rule.allowed_domains}
-              blockedDomains={rule.blocked_domains}
-              allowedIps={rule.allowed_ips}
-              blockedIps={rule.blocked_ips}
-              protocols={rule.protocols}
-            />
-          ))}
-        </div>
-      </div>
-      </div>
+  <div className="h-full overflow-y-auto rounded-box border border-white border-opacity-20">
+    <div className="w-full space-y-4">
+    {rules.map((rule, index) => (
+  <PostCard
+    key={rule.id || index} // Use rule.id if it exists, otherwise use the index
+    application={rule.application}
+    allowedDomains={rule.allowed_domains}
+    blockedDomains={rule.blocked_domains}
+    allowedIps={rule.allowed_ips}
+    blockedIps={rule.blocked_ips}
+    protocols={rule.protocols}
+  />
+))}
+
+
+      {/* Display Monitoring Configuration */}
+      <MonitoringCard
+        enable={monitoring.enable}
+        logFile={monitoring.log_file}
+        alertThresholds={monitoring.alert_thresholds}
+      />
+
+      {/* Display Ai_Ml Configuration */}
+      <AiMlCard
+        modelEndpoint={AiMl.model_endpoint}
+        enableAnomaly={AiMl.enable_anomaly_detection}
+      />
+
+      <LoggingCard
+        logLevel={logging.log_level}
+        logFile={logging.log_file}
+        maxSize={logging.max_size}
+        maxBackups={logging.max_backups}
+        maxAge={logging.max_age}
+      />  
+    </div>
+  </div>
+</div>
+
 
       {/* Right Section */}
       <div className="col-span-1 bg-black p-4 flex flex-col items-center border-l border-white border-opacity-20">

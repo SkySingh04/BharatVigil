@@ -52,6 +52,7 @@ func StartServer(logger *zap.Logger) {
 	})
 
 	// Endpoint to update the YAML configuration
+	// Endpoint to update the YAML configuration
 	r.POST("/config", func(c *gin.Context) {
 		configLock.Lock()
 		defer configLock.Unlock()
@@ -102,28 +103,29 @@ func StartServer(logger *zap.Logger) {
 		}
 		logger.Info("Current config after unmarshaling", zap.Any("config", currentConfig))
 
-		// Merge the new config with the current config
-		currentConfig.Firewall.Rules = mergeFirewallRules(currentConfig.Firewall.Rules, newConfig.Firewall.Rules)
+		// **MERGING LOGIC**:
 
-		// Update other parts of the config
-		// if !newConfig.Monitoring.IsZeroValue() {
-		// 	currentConfig.Monitoring = newConfig.Monitoring
-		// }
-		// if !newConfig.AI_ML.IsZeroValue() {
-		// 	currentConfig.AI_ML = newConfig.AI_ML
-		// }
-		// if len(newConfig.Endpoints) > 0 {
-		// 	currentConfig.Endpoints = newConfig.Endpoints
-		// }
-		// if !newConfig.WebConsole.IsZeroValue() {
-		// 	currentConfig.WebConsole = newConfig.WebConsole
-		// }
-		// if !newConfig.Logging.IsZeroValue() {
-		// 	currentConfig.Logging = newConfig.Logging
-		// }
-		// if !newConfig.Network.IsZeroValue() {
-		// 	currentConfig.Network = newConfig.Network
-		// }
+		// 1. Merge Monitoring if provided in newConfig
+		if newConfig.Monitoring.Enable || newConfig.Monitoring.LogFile != "" || newConfig.Monitoring.AlertThresholds.AbnormalTraffic > 0 || newConfig.Monitoring.AlertThresholds.BlockedAttempts > 0 {
+			currentConfig.Monitoring = newConfig.Monitoring
+		}
+
+		// 2. Merge Firewall if provided in newConfig
+		if len(newConfig.Firewall.Rules) > 0 {
+			currentConfig.Firewall.Rules = mergeFirewallRules(currentConfig.Firewall.Rules, newConfig.Firewall.Rules)
+		}
+
+		// 3. Merge AI_ML if provided in newConfig
+		if newConfig.AI_ML.ModelEndpoint != "" || newConfig.AI_ML.EnableAnomalyDetection {
+			currentConfig.AI_ML = newConfig.AI_ML
+		}
+
+		// 4. Merge Logging if provided in newConfig
+		if newConfig.Logging.LogLevel != "" || newConfig.Logging.LogFile != "" || newConfig.Logging.MaxSize > 0 || newConfig.Logging.MaxBackups > 0 || newConfig.Logging.MaxAge > 0 {
+			currentConfig.Logging = newConfig.Logging
+		}
+
+		// 5. Add similar checks for other sections (like WebConsole, Network, etc.)
 
 		// Convert the updated config back to YAML
 		updatedConfigData, err := yaml.Marshal(currentConfig)
@@ -135,7 +137,6 @@ func StartServer(logger *zap.Logger) {
 
 		// Write the updated config back to the file
 		err = os.WriteFile(configPath, updatedConfigData, 0644)
-
 		if err != nil {
 			logger.Error("Failed to write config file", zap.Error(err))
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update config"})
