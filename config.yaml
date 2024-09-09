@@ -1,5 +1,28 @@
 firewall:
   rules:
+  - id: 2
+    application: VSCode
+    allowed_domains:
+    - microsoft.com
+    blocked_domains: []
+    allowed_ips: []
+    blocked_ips: []
+    protocols:
+    - TCP
+  - id: 0
+    application: brave
+    allowed_domains:
+    - google.com
+    - example.com
+    blocked_domains:
+    - shady.com
+    allowed_ips:
+    - 192.168.1.1
+    blocked_ips:
+    - 10.0.0.1
+    protocols:
+    - TCP
+    - UDP
   - id: 1
     application: brave
     allowed_domains:
@@ -14,24 +37,6 @@ firewall:
     protocols:
     - TCP
     - UDP
-  - id: 2
-    application: VSCode
-    allowed_domains:
-    - microsoft.com
-    blocked_domains: []
-    allowed_ips: []
-    blocked_ips: []
-    protocols:
-    - TCP
-  - id: 0
-    application: VSCode
-    allowed_domains:
-    - microsoft.com
-    blocked_domains: []
-    allowed_ips: []
-    blocked_ips: []
-    protocols:
-    - TCP
 monitoring:
   enable: true
   log_file: /var/log/firewall-monitor.log

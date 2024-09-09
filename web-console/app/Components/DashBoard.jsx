@@ -195,10 +195,11 @@ const DashBoard = () => {
           </div>
 
           <div className="bg-black p-8">
-            <div className="flex items-center justify-between mb-4">
-              <img src="/secure.jpeg" className="w-20 h-20 mb-2 rounded-full" alt="Secure" />
-              <button className="btn btn-lg btn-success">Secure</button>
-            </div>
+          <div className="flex flex-col items-center justify-center mb-4">
+            <img src="/image.png" className="w-40 h-40 mb-2 rounded-full" alt="Secure" />
+            <strong className="text-white mt-2">Connection Secure</strong>
+          </div>
+
 
             <div className="mb-4">
               <label className="input input-bordered flex items-center gap-2">
@@ -322,7 +323,7 @@ const DashBoard = () => {
 
 
       {/* Right Section */}
-      <div className="col-span-1 bg-black p-4 flex flex-col items-center border-l border-white border-opacity-20">
+      <div className="col-span-1 bg-black p-4 flex flex-col items-center border-l border-white border-opacity-20 gap-4">
         <strong className="text-white mb-4">Requests</strong>
 
         {/* Refresh Button */}
@@ -338,29 +339,21 @@ const DashBoard = () => {
         <div className="text-white loading loading-infinity loading-lg">Loading requests</div>
         
           ) : requests.length > 0 ? (
-            <ul className="menu bg-base-200 rounded-box w-100 gap-4 overflow-y-auto h-[75vh] border border-white border-opacity-20">
+            <ul className="menu bg-base-200 rounded-box gap-4 overflow-y-auto h-[75vh] border border-white border-opacity-20">
               {requests.map((request) => (
                 <li key={request.no} className="p-4 bg-base-100 rounded-lg border border-white border-opacity-20">
-                  <div className="flex items-start">
-                    <img src="/path-to-your-icon.png" alt="Icon" className="w-8 h-8 mr-3" />
+                  <div>
+                    <img src="/req.png" alt="Icon" className="w-8 h-8 mr-3 rounded-lg" />
+                    
                     <div>
-                      <h3 className="text-lg font-semibold">Request {request.no}</h3>
-                      <ul className="menu bg-base-200 rounded-box w-full max-w-xs border border-white border-opacity-20">
-                        <li>
-                          <a className="text-sm mt-2">
-                            <strong>Time:</strong> {request.time}
-                          </a>
-                        </li>
-                        <li>
-                          <a className="text-sm mt-2">
-                            <strong>Source:</strong> {request.source}
-                          </a>
-                        </li>
-                        <li>
-                          <a className="text-sm mt-2">
-                            <strong>Destination:</strong> {request.destination}
-                          </a>
-                        </li>
+                            <strong className="text-sm m-2">Request: {request.no}</strong> <span> </span>
+                            <strong className="text-sm mt-2">Time:</strong> {request.time} <span> </span>
+                            <strong className="text-sm mt-2">Source:</strong> {request.source} <span> </span>
+                            <strong className="text-sm mt-2">Destination:</strong> {request.destination}
+                         
+                        <div className="dropdown dropdown-hover">
+                        <div tabIndex={0} role="button" className="btn bottom-2 right-2 m-1">Details</div>
+                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         <li>
                           <a className="text-sm mt-2">
                             <strong>Protocol:</strong> {request.protocol}
@@ -376,7 +369,10 @@ const DashBoard = () => {
                             <strong>Info:</strong> {request.info}
                           </a>
                         </li>
-                      </ul>
+                        </ul>
+                      
+                        
+                      </div>
                     </div>
                   </div>
                 </li>
