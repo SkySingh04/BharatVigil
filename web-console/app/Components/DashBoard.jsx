@@ -349,10 +349,10 @@ const DashBoard = () => {
                             <strong className="text-sm m-2">Request: {request.no}</strong> <span> </span>
                             <strong className="text-sm mt-2">Time:</strong> {request.time} <span> </span>
                             <strong className="text-sm mt-2">Source:</strong> {request.source} <span> </span>
-                            <strong className="text-sm mt-2">Destination:</strong> {request.destination}
+                            <strong className="text-sm mt-2">Destination:</strong> {request.destination} <span> </span>
                          
-                        <div className="dropdown dropdown-hover">
-                        <div tabIndex={0} role="button" className="btn bottom-2 right-2 m-1">Details</div>
+                        <div className="dropdown dropdown-hover border-white border-opacity-20">
+                        <div tabIndex={0} role="button" className="m-1">Details</div>
                         <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         <li>
                           <a className="text-sm mt-2">
