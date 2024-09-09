@@ -1,14 +1,5 @@
 firewall:
   rules:
-  - id: 0
-    application: VSCode
-    allowed_domains:
-    - microsoft.com
-    blocked_domains: []
-    allowed_ips: []
-    blocked_ips: []
-    protocols:
-    - TCP
   - id: 1
     application: brave
     allowed_domains:
@@ -24,6 +15,15 @@ firewall:
     - TCP
     - UDP
   - id: 2
+    application: VSCode
+    allowed_domains:
+    - microsoft.com
+    blocked_domains: []
+    allowed_ips: []
+    blocked_ips: []
+    protocols:
+    - TCP
+  - id: 0
     application: VSCode
     allowed_domains:
     - microsoft.com
