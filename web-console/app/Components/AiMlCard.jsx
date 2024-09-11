@@ -104,11 +104,11 @@ const AiMlCard = ({ modelEndpoint = '', enableAnomaly = false }) => {
         ) : (
           <div>
             <ul className="menu bg-base-200 rounded-box w-100">
-              <li>
-                <strong>model_endpoint:</strong> {formData.modelEndpoint}
+              <li><a>
+                <strong>model endpoint:</strong> {formData.modelEndpoint}</a>
               </li>
-              <li>
-                <strong>enable_anomaly_detection:</strong> {formData.enableAnomaly=== 'true' ? 'True' : 'False'}
+              <li><a>
+                <strong>enable anomaly detection:</strong> {formData.enableAnomaly=== 'true' ? 'True' : 'False'}</a>
               </li>
             </ul>
             <button

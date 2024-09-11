@@ -134,17 +134,17 @@ const MonitoringCard = ({ enable, logFile, alertThresholds }) => {
         ) : (
           <div>
             <ul className="menu bg-base-200 rounded-box w-100">
-              <li>
-                <strong>Enable Monitoring:</strong> {formData.enable ? 'Yes' : 'No'}
+              <li><a>
+                <strong>Enable Monitoring:</strong> {formData.enable ? 'Yes' : 'No'}</a>
               </li>
-              <li>
-                <strong>Log File:</strong> {formData.logFile}
+              <li><a>
+                <strong>Log File:</strong> {formData.logFile}</a>
               </li>
-              <li>
-                <strong>Abnormal Traffic Threshold:</strong> {formData.abnormalTraffic}
+              <li><a>
+                <strong>Abnormal Traffic Threshold:</strong> {formData.abnormalTraffic}</a>
               </li>
-              <li>
-                <strong>Blocked Attempts Threshold:</strong> {formData.blockedAttempts}
+              <li><a>
+                <strong>Blocked Attempts Threshold:</strong> {formData.blockedAttempts}</a>
               </li>
             </ul>
             <button

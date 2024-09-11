@@ -180,7 +180,7 @@ const DashBoard = () => {
   return (
     <div className="min-h-screen bg-black grid grid-cols-4 gap-4">
   {/* Left Section */}
-  <div className="col-span-1 border-r border-white">
+  <div className="col-span-1 border-r border-white border-opacity-20">
     <div className="flex h-screen bg-black text-white">
       <div className="w-16 bg-black-900 p-4 flex flex-col items-center">
         {/* Icon buttons */}
@@ -211,12 +211,12 @@ const DashBoard = () => {
 
         <div className="menu bg-base-200 rounded-box w-100 mb-4 overflow-y-auto h-80 border border-white border-opacity-20">
           <ul>
-            {['Microsoft Edge', 'Portmaster Core Service', 'System DNS Client', 'Firefox'].map((app, index) => (
+            {['Microsoft Edge', 'System DNS Client', 'Firefox'].map((app, index) => (
               <li key={index} className="p-4 bg-base-100 rounded-lg mb-2 border border-white border-opacity-20">
                 <div className="flex justify-between items-center">
-                  <img src="/path-to-your-icon.png" alt="App Icon" className="w-8 h-8 mr-3" />
-                  <span className="text-lg font-semibold">{app}</span>
-                  <div className="radial-progress bg-primary text-primary-content border-primary border-2" style={{ "--value": 50 }} role="progressbar">
+                  
+                  <strong className="text font-semibold">{app}</strong>
+                  <div className="radial-progress bg-primary text-primary-content border-primary" style={{  "--value": "50", "--size": "5rem"}}role="progressbar">
                     50%
                   </div>
                 </div>
@@ -226,7 +226,7 @@ const DashBoard = () => {
         </div>
 
         {/* Connections Information */}
-        <div className="menu bg-base-200 rounded-box w-100 mt-4 border border-white border-opacity-20">
+        <div className="menu bg-base-200 rounded-box w-100 mt-4 h-80 border border-white border-opacity-20">
           <div className="h-64 overflow-y-auto">
             <ul className="grid grid-cols-1 gap-4">
               {[
@@ -319,7 +319,7 @@ const DashBoard = () => {
 
 
 
-<div className=" bg-black p-4 flex flex-col items-center border-t border-white border-opacity-20 gap-4 mt-4 w-screen">
+<div className="bg-black p-4 flex flex-col items-center border-t border-white border-opacity-20 gap-4 mt-4 w-screen overflow-y-auto h-80">
   <strong className="text-white mb-4">Requests</strong>
 
   {/* Refresh Button */}
@@ -331,47 +331,60 @@ const DashBoard = () => {
   {loadingRequests ? (
     <div className="text-white loading loading-infinity loading-lg">Loading requests</div>
   ) : requests.length > 0 ? (
-    <ul className="menu bg-base-200 rounded-box gap-4 overflow-y-auto h-[40vh] border border-white border-opacity-20 w-full">
-      {requests.map((request) => (
-        <li key={request.no} className="p-4 bg-base-100 rounded-lg border border-white border-opacity-20">
-          <div className="flex gap-4">
-            <img src="/req.png" alt="Icon" className="w-8 h-8 rounded-lg" />
-            <div className="flex flex-col gap-2">
-              <strong className="text-sm">Request: {request.no}</strong>
-              <strong className="text-sm">Time:</strong> {request.time}
-              <strong className="text-sm">Source:</strong> {request.source}
-              <strong className="text-sm">Destination:</strong> {request.destination}
-            </div>
-          </div>
+    <table className="table-auto bg-base-200 rounded-box w-full border border-white border-opacity-20 overflow-y-auto h-80">
+      {/* Table Head */}
+      <thead>
+        <tr>
+          <th className="text-white px-4 py-2">Request No</th>
+          <th className="text-white px-4 py-2">Time</th>
+          <th className="text-white px-4 py-2">Source</th>
+          <th className="text-white px-4 py-2">Destination</th>
+          <th className="text-white px-4 py-2">Details</th>
+        </tr>
+      </thead>
 
-          {/* Dropdown for Additional Details */}
-          <div className="dropdown dropdown-hover border-white border-opacity-20 mt-2">
-            <div tabIndex={0} role="button" className="m-1">Details</div>
-            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-              <li>
-                <a className="text-sm">
-                  <strong>Protocol:</strong> {request.protocol}
-                </a>
-              </li>
-              <li>
-                <a className="text-sm">
-                  <strong>Length:</strong> {request.length}
-                </a>
-              </li>
-              <li>
-                <a className="text-sm">
-                  <strong>Info:</strong> {request.info}
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-      ))}
-    </ul>
+      {/* Table Body */}
+      <tbody>
+        {requests.slice().reverse().map((request) => (
+          <tr key={request.no} className="bg-base-100 hover:bg-base-300 border-b border-white border-opacity-20">
+            <td className="px-4 py-2">{request.no}</td>
+            <td className="px-4 py-2">{request.time}</td>
+            <td className="px-4 py-2">{request.source}</td>
+            <td className="px-4 py-2">{request.destination}</td>
+            <td className="px-4 py-2">
+              {/* Dropdown for Additional Details */}
+              <div className="dropdown dropdown-hover">
+                <div tabIndex={0} role="button" className="btn btn-sm btn-outline">
+                  Details
+                </div>
+                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                  <li>
+                    <a className="text-sm">
+                      <strong>Protocol:</strong> {request.protocol}
+                    </a>
+                  </li>
+                  <li>
+                    <a className="text-sm">
+                      <strong>Length:</strong> {request.length}
+                    </a>
+                  </li>
+                  <li>
+                    <a className="text-sm">
+                      <strong>Info:</strong> {request.info}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   ) : (
     <div className="text-white">No requests found.</div>
   )}
 </div>
+
 </div>
   );
 };
