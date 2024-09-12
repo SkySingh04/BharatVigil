@@ -180,7 +180,7 @@ const DashBoard = () => {
   return (
     <div className="min-h-screen bg-black grid grid-cols-4 gap-4">
   {/* Left Section */}
-  <div className="col-span-1 border-r border-white border-opacity-20">
+  <div className="col-span-1">
     <div className="flex h-screen bg-black text-white">
       <div className="w-16 bg-black-900 p-4 flex flex-col items-center">
         {/* Icon buttons */}
@@ -194,7 +194,7 @@ const DashBoard = () => {
         </div>
       </div>
 
-      <div className="bg-black p-8">
+      <div className="bg-black p-2">
         <div className="flex flex-col items-center justify-center mb-4">
           <img src="/image.png" className="w-40 h-40 mb-2 rounded-full" alt="Secure" />
           <strong className="text-white mt-2">Connection Secure</strong>
@@ -270,10 +270,10 @@ const DashBoard = () => {
 
   {/* Middle Section */}
   <div className="col-span-3 p-6 flex flex-col bg-black">
-  <div className="h-full rounded-box border border-white border-opacity-20">
+  <div className="h-full rounded-box">
     <div className="grid grid-cols-2 gap-4 h-full">
       {/* Left Section: PostCard with Scroll */}
-      <div className="h-full overflow-y-auto rounded-box border border-white border-opacity-20 p-4">
+      <div className="h-full overflow-y-auto rounded-box p-4">
         <div className="space-y-4">
           {rules.map((rule, index) => (
             <PostCard
@@ -290,7 +290,7 @@ const DashBoard = () => {
       </div>
 
       {/* Right Section: MonitoringCard, AiMlCard, LoggingCard */}
-      <div className="flex flex-col space-y-4 overflow-y-auto rounded-box border border-white border-opacity-20 p-4">
+      <div className="flex flex-col space-y-4 overflow-y-auto rounded-box p-4">
         {/* Display Monitoring Configuration */}
         <MonitoringCard
           enable={monitoring.enable}
