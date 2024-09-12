@@ -16,6 +16,7 @@ const DashBoard = () => {
   const[endpoints, setEndpoints] = useState([]); // State for endpoints
   const [requests, setRequests] = useState([]); // State for requests
   const [loadingRequests, setLoadingRequests] = useState(true); // Loading state for requests
+  
 
   // Fetch firewall rules from backend
   useEffect(() => {
@@ -178,148 +179,126 @@ const DashBoard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black grid grid-cols-4 gap-4">
-  {/* Left Section */}
-  <div className="col-span-1">
-    <div className="flex h-screen bg-black text-white">
-      <div className="w-16 bg-black-900 p-4 flex flex-col items-center">
-        {/* Icon buttons */}
-        <div className="mb-8">
-          <FaBell size={24} className="mb-8 hover:text-green-400 cursor-pointer" />
-          <FaExclamationTriangle size={24} className="mb-8 hover:text-green-400 cursor-pointer" />
-          <FaCog size={24} className="hover:text-green-400 cursor-pointer" />
-        </div>
-        <div className="mt-auto">
-          <FaSignOutAlt size={24} className="hover:text-red-400 cursor-pointer" />
-        </div>
+    <div className="bg-black grid grid-cols-4 gap-4">
+    {/* Left Section */}
+    <div className="w-8 bg-black p-2 flex flex-col items-center h-full fixed left-0 top-0 mt-2">
+    {/* Icon Buttons */}
+    <div className="flex-1 flex flex-col items-center gap-4">
+      <FaBell size={24} className="hover:text-green-400 cursor-pointer" />
+      <FaExclamationTriangle size={24} className="hover:text-green-400 cursor-pointer" />
+      <FaCog size={24} className="hover:text-green-400 cursor-pointer" />
+    </div>
+    {/* Logout Button */}
+    <div className="mt-auto">
+      <FaSignOutAlt size={24} className="hover:text-red-400 cursor-pointer" />
+    </div>
+  </div>
+
+  {/* Main Content Section */}
+  <div className=" w-full p-4 flex flex-col bg-black text-white">
+    <div className="flex-1 overflow-y-auto">
+      {/* Profile Section */}
+      <div className="flex flex-col items-center justify-center mb-4">
+        <img src="/image.png" className="w-40 h-40 mb-2 rounded-full" alt="Secure" />
+        <strong className="text-white mt-2">Connection Secure</strong>
       </div>
 
-      <div className="bg-black p-2">
-        <div className="flex flex-col items-center justify-center mb-4">
-          <img src="/image.png" className="w-40 h-40 mb-2 rounded-full" alt="Secure" />
-          <strong className="text-white mt-2">Connection Secure</strong>
-        </div>
+      {/* Search Input */}
+      <div className="mb-4">
+        <label className="input input-bordered flex items-center gap-2">
+          <input type="text" className="grow bg-black text-white border-gray-500 rounded-lg p-2" placeholder="Search" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
+            <path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" />
+          </svg>
+        </label>
+      </div>
 
-        <div className="mb-4">
-          <label className="input input-bordered flex items-center gap-2">
-            <input type="text" className="grow" placeholder="Search" />
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
-              <path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" />
-            </svg>
-          </label>
-        </div>
+      {/* Firewall Rules Section */}
+      <div className="bg-base-200 rounded-lg p-4 mb-4 border border-white border-opacity-20 h-[250px] overflow-y-auto">
+        <ul className="space-y-4">
+          {['Microsoft Edge', 'System DNS Client', 'Firefox', 'Chrome', 'Safari'].map((app, index) => (
+            <li key={index} className="p-4 bg-gray-800 rounded-lg border border-gray-600 flex justify-between items-center">
+              <strong className="text-white">{app}</strong>
+              <div className="radial-progress bg-primary text-primary-content border-primary" style={{ "--value": "50", "--size": "3rem" }} role="progressbar">
+                50%
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-        <div className="menu bg-base-200 rounded-box w-100 mb-4 overflow-y-auto h-80 border border-white border-opacity-20">
-          <ul>
-            {['Microsoft Edge', 'System DNS Client', 'Firefox'].map((app, index) => (
-              <li key={index} className="p-4 bg-base-100 rounded-lg mb-2 border border-white border-opacity-20">
-                <div className="flex justify-between items-center">
-                  
-                  <strong className="text font-semibold">{app}</strong>
-                  <div className="radial-progress bg-primary text-primary-content border-primary" style={{  "--value": "50", "--size": "5rem"}}role="progressbar">
-                    50%
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Connections Information */}
-        <div className="menu bg-base-200 rounded-box w-100 mt-4 h-80 border border-white border-opacity-20">
-          <div className="h-64 overflow-y-auto">
-            <ul className="grid grid-cols-1 gap-4">
-              {[
-                { country: "Canada", ip: "78.138.17.182", connections: 2, hops: 2 },
-                { country: "USA", ip: "5.34.178.198", connections: 45, hops: 2 },
-                { country: "France", ip: "141.95.158.73", connections: 6, hops: 2 },
-                { country: "Germany", ip: "138.201.140.70", connections: 184, hops: 2 },
-              ].map((data, index) => (
-                <li key={index} className="p-4 bg-base-100 rounded-lg border border-white border-opacity-20">
-                  <div className="flex items-start">
-                    <img src="/path-to-your-icon.png" alt="Country Icon" className="w-8 h-8 mr-3" />
-                    <div>
-                      <h3 className="text-lg font-semibold">{data.ip}</h3>
-                      <ul className="menu bg-base-200 rounded-box w-full max-w-xs">
-                        <li>
-                          <a className="text-sm mt-2">
-                            <strong>Country:</strong> {data.country}
-                          </a>
-                        </li>
-                        <li>
-                          <a className="text-sm mt-2">
-                            <strong>Connections:</strong> {data.connections}
-                          </a>
-                        </li>
-                        <li>
-                          <a className="text-sm mt-2">
-                            <strong>HOPS:</strong> {data.hops}
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      {/* Connections Information */}
+      <div className="bg-base-200 rounded-lg p-4 border border-white border-opacity-20 h-[250px] overflow-y-auto">
+        <ul className="space-y-4">
+          {[
+            { country: "Canada", ip: "78.138.17.182", connections: 2, hops: 2 },
+            { country: "USA", ip: "5.34.178.198", connections: 45, hops: 2 },
+            { country: "France", ip: "141.95.158.73", connections: 6, hops: 2 },
+            { country: "Germany", ip: "138.201.140.70", connections: 184, hops: 2 },
+          ].map((data, index) => (
+            <li key={index} className="p-4 bg-gray-800 rounded-lg border border-gray-600 flex items-center">
+              <img src="/path-to-your-icon.png" alt="Country Icon" className="w-6 h-6 mr-4" />
+              <div>
+                <h3 className="text-white text-lg font-semibold">{data.ip}</h3>
+                <ul className="text-sm text-gray-400 space-y-1">
+                  <li><strong>Country:</strong> {data.country}</li>
+                  <li><strong>Connections:</strong> {data.connections}</li>
+                  <li><strong>HOPS:</strong> {data.hops}</li>
+                </ul>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </div>
 
   {/* Middle Section */}
-  <div className="col-span-3 p-6 flex flex-col bg-black">
-  <div className="h-full rounded-box">
-    <div className="grid grid-cols-2 gap-4 h-full">
-      {/* Left Section: PostCard with Scroll */}
-      <div className="h-full overflow-y-auto rounded-box p-4">
-        <div className="space-y-4">
-          {rules.map((rule, index) => (
-            <PostCard
-              key={rule.id || index} // Use rule.id if it exists, otherwise use the index
-              application={rule.application}
-              allowedDomains={rule.allowed_domains}
-              blockedDomains={rule.blocked_domains}
-              allowedIps={rule.allowed_ips}
-              blockedIps={rule.blocked_ips}
-              protocols={rule.protocols}
-            />
-          ))}
+  <div className="col-span-3 p-6 flex flex-col bg-black h-screen">
+    <div className="h-full rounded-lg flex flex-col justify-between">
+      <div className="grid grid-cols-2 gap-4 h-full">
+        {/* Left Section: PostCard with Scroll */}
+        <div className="h-full overflow-y-auto rounded-lg">
+          <div className="space-y-4">
+            {rules.map((rule, index) => (
+              <PostCard
+                key={rule.id || index}
+                application={rule.application}
+                allowedDomains={rule.allowed_domains}
+                blockedDomains={rule.blocked_domains}
+                allowedIps={rule.allowed_ips}
+                blockedIps={rule.blocked_ips}
+                protocols={rule.protocols}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Right Section: MonitoringCard, AiMlCard, LoggingCard */}
-      <div className="flex flex-col space-y-4 overflow-y-auto rounded-box p-4">
-        {/* Display Monitoring Configuration */}
-        <MonitoringCard
-          enable={monitoring.enable}
-          logFile={monitoring.log_file}
-          alertThresholds={monitoring.alert_thresholds}
-        />
-
-        {/* Display Ai_Ml Configuration */}
-        <AiMlCard
-          modelEndpoint={AiMl.model_endpoint}
-          enableAnomaly={AiMl.enable_anomaly_detection}
-        />
-
-        {/* Logging Configuration */}
-        <LoggingCard
-          logLevel={logging.log_level}
-          logFile={logging.log_file}
-          maxSize={logging.max_size}
-          maxBackups={logging.max_backups}
-          maxAge={logging.max_age}
-        />
+        {/* Right Section: MonitoringCard, AiMlCard, LoggingCard */}
+        <div className="flex flex-col space-y-4 overflow-y-auto rounded-lg">
+          <MonitoringCard
+            enable={monitoring.enable}
+            logFile={monitoring.log_file}
+            alertThresholds={monitoring.alert_thresholds}
+          />
+          <AiMlCard
+            modelEndpoint={AiMl.model_endpoint}
+            enableAnomaly={AiMl.enable_anomaly_detection}
+          />
+          <LoggingCard
+            logLevel={logging.log_level}
+            logFile={logging.log_file}
+            maxSize={logging.max_size}
+            maxBackups={logging.max_backups}
+            maxAge={logging.max_age}
+          />
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-
-
-<div className="bg-black p-4 flex flex-col items-center border-t border-white border-opacity-20 gap-4 mt-4 w-screen overflow-y-auto h-80">
+{/* Bottom Section */}
+<div className="bg-black p-2 flex flex-col items-center border-t border-white border-opacity-20 gap-4 mt-4 w-screen overflow-y-auto h-80">
   <strong className="text-white mb-4">Requests</strong>
 
   {/* Refresh Button */}
@@ -331,55 +310,57 @@ const DashBoard = () => {
   {loadingRequests ? (
     <div className="text-white loading loading-infinity loading-lg">Loading requests</div>
   ) : requests.length > 0 ? (
-    <table className="table-auto bg-base-200 rounded-box w-full border border-white border-opacity-20 overflow-y-auto h-80">
-      {/* Table Head */}
-      <thead>
-        <tr>
-          <th className="text-white px-4 py-2">Request No</th>
-          <th className="text-white px-4 py-2">Time</th>
-          <th className="text-white px-4 py-2">Source</th>
-          <th className="text-white px-4 py-2">Destination</th>
-          <th className="text-white px-4 py-2">Details</th>
-        </tr>
-      </thead>
-
-      {/* Table Body */}
-      <tbody>
-        {requests.slice().reverse().map((request) => (
-          <tr key={request.no} className="bg-base-100 hover:bg-base-300 border-b border-white border-opacity-20">
-            <td className="px-4 py-2">{request.no}</td>
-            <td className="px-4 py-2">{request.time}</td>
-            <td className="px-4 py-2">{request.source}</td>
-            <td className="px-4 py-2">{request.destination}</td>
-            <td className="px-4 py-2">
-              {/* Dropdown for Additional Details */}
-              <div className="dropdown dropdown-hover">
-                <div tabIndex={0} role="button" className="btn btn-sm btn-outline">
-                  Details
-                </div>
-                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                  <li>
-                    <a className="text-sm">
-                      <strong>Protocol:</strong> {request.protocol}
-                    </a>
-                  </li>
-                  <li>
-                    <a className="text-sm">
-                      <strong>Length:</strong> {request.length}
-                    </a>
-                  </li>
-                  <li>
-                    <a className="text-sm">
-                      <strong>Info:</strong> {request.info}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </td>
+    <div className="overflow-x-auto w-full">
+      <table className="table-auto bg-base-200 rounded-box w-full border border-white border-opacity-20 overflow-y-auto h-80">
+        {/* Table Head */}
+        <thead className="bg-gray-800 text-white">
+          <tr className="text-left">
+            <th className="px-6 py-3">Request No</th>
+            <th className="px-6 py-3">Time</th>
+            <th className="px-6 py-3">Source</th>
+            <th className="px-6 py-3">Destination</th>
+            <th className="px-6 py-3">Details</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        {/* Table Body */}
+        <tbody>
+          {requests.slice().reverse().map((request, index) => (
+            <tr key={request.no} className="bg-base-100 hover:bg-base-300 border-b border-white border-opacity-20 text-white">
+              <td className="px-6 py-3">{request.no}</td>
+              <td className="px-6 py-3">{request.time}</td>
+              <td className="px-6 py-3">{request.source}</td>
+              <td className="px-6 py-3">{request.destination}</td>
+              <td className="px-6 py-3">
+                {/* Dropdown for Additional Details */}
+                <div className="dropdown dropdown-hover">
+                  <div tabIndex={0} role="button" className="btn btn-sm btn-outline">
+                    Details
+                  </div>
+                  <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                    <li>
+                      <a className="text-sm">
+                        <strong>Protocol:</strong> {request.protocol}
+                      </a>
+                    </li>
+                    <li>
+                      <a className="text-sm">
+                        <strong>Length:</strong> {request.length}
+                      </a>
+                    </li>
+                    <li>
+                      <a className="text-sm">
+                        <strong>Info:</strong> {request.info}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   ) : (
     <div className="text-white">No requests found.</div>
   )}

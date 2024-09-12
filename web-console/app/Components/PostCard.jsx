@@ -67,18 +67,6 @@ const PostCard = ({
                         }
                     ]
                 },
-                monitoring: {
-                    enable: true,  // This should be set according to your requirements
-                    log_file: "/var/log/firewall-monitor.log",
-                    alert_thresholds: {
-                        abnormal_traffic: 1000,
-                        blocked_attempts: 10,
-                    }
-                },
-                ai_ml: {
-                    model_endpoint: "http://localhost:5000/predict",
-                    enable_anomaly_detection: true,
-                },
                 endpoints: [
                     // You can add endpoint details here if needed
                 ],
@@ -220,7 +208,7 @@ const PostCard = ({
 
 
             ) : (
-                <div>
+                <div className='mt-4'>
                 
                     <ul className="menu bg-base-200 rounded-box w-100">
                         <li>

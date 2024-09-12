@@ -166,7 +166,6 @@ const LoggingCard = ({
                     <ul className="menu bg-base-200 rounded-box w-100">
                         <li>
                             <div className="flex items-start">
-                                <img src="/path-to-your-icon.png" alt="Icon" className="w-8 h-8 mr-3" />
                                 <div>
                                     <h3 className="text-lg font-semibold">Logging Configuration</h3>
                                     <ul className="menu bg-base-200 rounded-box w-full max-w-xs">

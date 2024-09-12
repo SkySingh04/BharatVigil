@@ -104,6 +104,11 @@ const AiMlCard = ({ modelEndpoint = '', enableAnomaly = false }) => {
         ) : (
           <div>
             <ul className="menu bg-base-200 rounded-box w-100">
+                        <li>
+                            <div className="flex items-start">
+                            <div>
+             <h3 className="text-lg font-semibold">AI-Ml Configuration</h3>
+            <ul className="menu bg-base-200 rounded-box w-100">
               <li><a>
                 <strong>model endpoint:</strong> {formData.modelEndpoint}</a>
               </li>
@@ -111,12 +116,19 @@ const AiMlCard = ({ modelEndpoint = '', enableAnomaly = false }) => {
                 <strong>enable anomaly detection:</strong> {formData.enableAnomaly=== 'true' ? 'True' : 'False'}</a>
               </li>
             </ul>
+            </div>
+            </div>
+            </li>
+            </ul>
+            
+          
             <button
               onClick={handleEditClick}
               className="absolute bottom-2 right-2 btn btn-info btn-outline"
             >
               Edit
             </button>
+            
           </div>
         )}
       </div>
