@@ -107,19 +107,16 @@ const MonitoringCard = ({ enable, logFile, alertThresholds }) => {
                     name="abnormalTraffic"
                     value={formData.abnormalTraffic}
                     onChange={handleInputChange}
-                    className="p-2 input input-bordered input-neutral w-100"
+                    className="p-2 input input-bordered input-neutral w-20"
                   />
-                </a>
-              </li>
-              <li>
-                <a>
+                
                   <strong className="block mb-1 text-white">Blocked Attempts Threshold</strong>
                   <input
                     type="number"
                     name="blockedAttempts"
                     value={formData.blockedAttempts}
                     onChange={handleInputChange}
-                    className="p-2 input input-bordered input-neutral w-100"
+                    className="p-2 input input-bordered input-neutral w-10"
                   />
                 </a>
               </li>
@@ -142,14 +139,13 @@ const MonitoringCard = ({ enable, logFile, alertThresholds }) => {
               <li><a>
                 <strong>Enable Monitoring:</strong> {formData.enable ? 'Yes' : 'No'}</a>
               </li>
+             <li><a>
+                <strong>Abnormal Traffic Threshold:</strong> {formData.abnormalTraffic}
+              
+                <strong>Blocked Attempts Threshold:</strong> {formData.blockedAttempts}</a>
+              </li>
               <li><a>
                 <strong>Log File:</strong> {formData.logFile}</a>
-              </li>
-              <li><a>
-                <strong>Abnormal Traffic Threshold:</strong> {formData.abnormalTraffic}</a>
-              </li>
-              <li><a>
-                <strong>Blocked Attempts Threshold:</strong> {formData.blockedAttempts}</a>
               </li>
             </ul>
             </div>

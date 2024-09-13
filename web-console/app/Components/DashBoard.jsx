@@ -150,7 +150,8 @@ const DashBoard = () => {
   </div>
 
   {/* Main Content Section */}
-  <div className=" w-full p-4 flex flex-col bg-black text-white p-2">
+  <div className=" w-full p-4 flex flex-col bg-black text-white  h-2/3">
+  
     <div className="flex-1 overflow-y-auto">
       {/* Profile Section */}
       <div className="flex flex-col items-center justify-center mb-4">
@@ -209,9 +210,11 @@ const DashBoard = () => {
   </div>
 
   {/* Middle Section */}
-  <div className="col-span-3 p-8 flex flex-col bg-black h-screen">
+  <div className="col-span-3 p-8 flex flex-col bg-black h-2/3">
   <div className="h-full rounded-lg flex flex-col justify-between relative ">
-    <div className="grid grid-cols-2 gap-4 h-full">
+  
+    <div className="p-2 grid grid-cols-2 gap-4 h-full">
+    
       {/* Left Section: PostCard with Scroll */}
       <div className="h-full overflow-y-auto rounded-lg w-full">
         <div className="space-y-4">
@@ -230,7 +233,8 @@ const DashBoard = () => {
       </div>
 
       {/* Right Section: MonitoringCard, AiMlCard, LoggingCard */}
-      <div className="flex flex-col space-y-4  overflow-y-auto rounded-lg relative">
+      <div className="flex flex-col space-y-4 p-0  overflow-y-auto rounded-lg relative">
+      <h1 className="text-5xl font-bold text-right">Bharath Vigil</h1>
         <MonitoringCard
           enable={monitoring.enable}
           logFile={monitoring.log_file}

@@ -87,7 +87,7 @@ const LoggingCard = ({
         <div className="bg-black text-white rounded-lg w-[500px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
             {isEditing ? (
                 <div>
-                    <ul className="menu bg-base-200 rounded-box w-100 max-w-xs">
+                    <ul className="menu bg-base-200 rounded-box  max-w-xs">
                         <li>
                             <a>
                                 <strong className="block mb-1 text-white">Log Level</strong>
@@ -96,7 +96,7 @@ const LoggingCard = ({
                                     name="logLevel"
                                     value={formData.logLevel}
                                     onChange={handleInputChange}
-                                    className="p-2 input input-bordered input-neutral w-100"
+                                    className="p-2 input input-bordered input-neutral max-w-xs"
                                 />
                             </a>
                         </li>
@@ -109,7 +109,7 @@ const LoggingCard = ({
                                     name="logFile"
                                     value={formData.logFile}
                                     onChange={handleInputChange}
-                                    className="p-2 input input-bordered input-neutral w-100"
+                                    className="p-2 input input-bordered input-neutral max-w-xs"
                                 />
                             </a>
                         </li>
@@ -122,33 +122,25 @@ const LoggingCard = ({
                                     name="maxSize"
                                     value={formData.maxSize}
                                     onChange={handleInputChange}
-                                    className="p-2 input input-bordered input-neutral w-100"
+                                    className="p-2 input input-bordered input-neutral w-20"
                                 />
-                            </a>
-                        </li>
-
-                        <li>
-                            <a>
-                                <strong className="block mb-1 text-white">Max Backups</strong>
-                                <input
-                                    type="number"
-                                    name="maxBackups"
-                                    value={formData.maxBackups}
-                                    onChange={handleInputChange}
-                                    className="p-2 input input-bordered input-neutral w-100"
-                                />
-                            </a>
-                        </li>
-
-                        <li>
-                            <a>
+                         
                                 <strong className="block mb-1 text-white">Max Age (Days)</strong>
                                 <input
                                     type="number"
                                     name="maxAge"
                                     value={formData.maxAge}
                                     onChange={handleInputChange}
-                                    className="p-2 input input-bordered input-neutral w-100"
+                                    className="p-2 input input-bordered input-neutral w-10"
+                                />
+                           
+                                <strong className="block mb-1 text-white">Max Backups</strong>
+                                <input
+                                    type="number"
+                                    name="maxBackups"
+                                    value={formData.maxBackups}
+                                    onChange={handleInputChange}
+                                    className="p-2 input input-bordered input-neutral w-10"
                                 />
                             </a>
                         </li>
@@ -163,35 +155,30 @@ const LoggingCard = ({
                 </div>
             ) : (
                 <div>
-                    <ul className="menu bg-base-200 rounded-box w-100">
+                    <ul className="menu bg-base-200 rounded-box w-full">
                         <li>
                             <div className="flex items-start">
                                 <div>
                                     <h3 className="text-lg text-info font-semibold">Logging Configuration</h3>
-                                    <ul className="menu bg-base-200 rounded-box w-full max-w-xs">
+                                    <ul className="menu bg-base-200 rounded-box w-full">
                                         <li>
                                             <a className="text-sm mt-2">
                                                 <strong>Log Level:</strong> {formData.logLevel}
                                             </a>
                                         </li>
-                                        <li>
-                                            <a className="text-sm mt-2">
-                                                <strong>Log File:</strong> {formData.logFile}
-                                            </a>
-                                        </li>
+                                        
                                         <li>
                                             <a className="text-sm mt-2">
                                                 <strong>Max Size (MB):</strong> {formData.maxSize}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="text-sm mt-2">
-                                                <strong>Max Backups:</strong> {formData.maxBackups}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="text-sm mt-2">
                                                 <strong>Max Age (Days):</strong> {formData.maxAge}
+                                                 <strong>Max Backups:</strong> {formData.maxBackups}
+                                            
+                                                
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a className="text-sm mt-2">
+                                                <strong>Log File:</strong> {formData.logFile}
                                             </a>
                                         </li>
                                     </ul>
