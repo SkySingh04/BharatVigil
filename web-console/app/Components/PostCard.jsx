@@ -93,10 +93,10 @@ const PostCard = ({
     };
 
     return (
-        <div className="bg-black text-white rounded-lg w-[400px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
+        <div className="bg-black text-white rounded-lg w-[500px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
             {isEditing ? (
                 <div>
-                <ul className="menu bg-base-200 rounded-box w-100 max-w-xs">
+                <ul className="menu bg-base-200 rounded-box w-90">
                     <li>
                         <a>
                         <strong className="block mb-1 text-white">Application</strong>
@@ -105,7 +105,7 @@ const PostCard = ({
                             name="application"
                             value={formData.application}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral w-100"
+                            className="p-2 input input-bordered input-neutral w-full"
                         />
                         </a>
                     </li>
@@ -117,7 +117,7 @@ const PostCard = ({
                             name="allowedDomains"
                             value={formData.allowedDomains}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral "
+                            className="p-2 input input-bordered input-neutral w-full"
                         />
                         </a>
                     </li>
@@ -129,7 +129,7 @@ const PostCard = ({
                             name="blockedDomains"
                             value={formData.blockedDomains}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral "
+                            className="p-2 input input-bordered input-neutral w-full "
                         />
                         </a>
                     </li>
@@ -153,7 +153,7 @@ const PostCard = ({
                             name="blockedIps"
                             value={formData.blockedIps}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral"
+                            className="p-2 input input-bordered input-neutral w-full"
                         />
                         </a>
                     </li>
@@ -165,7 +165,7 @@ const PostCard = ({
                             name="protocols"
                             value={formData.protocols}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral w-80"
+                            className="p-2 input input-bordered input-neutral w-60"
                         />
                         </a>
                     </li>
@@ -189,7 +189,7 @@ const PostCard = ({
                         <li>
                             <div className="flex items-start">
                             <div>
-                                <h3 className="text-lg font-semibold">{formData.application}</h3>
+                                <h3 className="text-lg text-info font-semibold">{formData.application}</h3>
                                 <ul className="menu bg-base-200 rounded-box w-full max-w-xs">
                                 <li>
                                     <a className="text-sm mt-2">

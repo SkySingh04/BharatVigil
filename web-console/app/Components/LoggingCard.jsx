@@ -84,7 +84,7 @@ const LoggingCard = ({
     };
 
     return (
-        <div className="bg-black text-white rounded-lg w-[450px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
+        <div className="bg-black text-white rounded-lg w-[500px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
             {isEditing ? (
                 <div>
                     <ul className="menu bg-base-200 rounded-box w-100 max-w-xs">
@@ -167,7 +167,7 @@ const LoggingCard = ({
                         <li>
                             <div className="flex items-start">
                                 <div>
-                                    <h3 className="text-lg font-semibold">Logging Configuration</h3>
+                                    <h3 className="text-lg text-info font-semibold">Logging Configuration</h3>
                                     <ul className="menu bg-base-200 rounded-box w-full max-w-xs">
                                         <li>
                                             <a className="text-sm mt-2">

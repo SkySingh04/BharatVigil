@@ -150,7 +150,7 @@ const DashBoard = () => {
   </div>
 
   {/* Main Content Section */}
-  <div className=" w-full p-4 flex flex-col bg-black text-white">
+  <div className=" w-full p-4 flex flex-col bg-black text-white p-2">
     <div className="flex-1 overflow-y-auto">
       {/* Profile Section */}
       <div className="flex flex-col items-center justify-center mb-4">
@@ -160,7 +160,7 @@ const DashBoard = () => {
 
       {/* Search Input */}
       <div className="mb-4">
-        <label className="input input-bordered flex items-center gap-2">
+        <label className="input input-bordered flex items-center gap-2 p-2">
           <input type="text" className="grow bg-black text-white border-gray-500 rounded-lg p-2" placeholder="Search" />
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
             <path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" />
@@ -174,7 +174,7 @@ const DashBoard = () => {
           {['Microsoft Edge', 'System DNS Client', 'Firefox', 'Chrome', 'Safari'].map((app, index) => (
             <li key={index} className="p-4 bg-gray-800 rounded-lg border border-gray-600 flex justify-between items-center">
               <strong className="text-white">{app}</strong>
-              <div className="radial-progress bg-primary text-primary-content border-primary" style={{ "--value": "50", "--size": "3rem" }} role="progressbar">
+              <div className="radial-progress bg-info text-white-content border-primary" style={{ "--value": "50", "--size": "3rem" }} role="progressbar">
                 50%
               </div>
             </li>
@@ -209,11 +209,11 @@ const DashBoard = () => {
   </div>
 
   {/* Middle Section */}
-  <div className="col-span-3 p-6 flex flex-col bg-black h-screen">
-  <div className="h-full rounded-lg flex flex-col justify-between relative">
+  <div className="col-span-3 p-8 flex flex-col bg-black h-screen">
+  <div className="h-full rounded-lg flex flex-col justify-between relative ">
     <div className="grid grid-cols-2 gap-4 h-full">
       {/* Left Section: PostCard with Scroll */}
-      <div className="h-full overflow-y-auto rounded-lg">
+      <div className="h-full overflow-y-auto rounded-lg w-full">
         <div className="space-y-4">
           {rules.map((rule) => (
             <PostCard
@@ -230,7 +230,7 @@ const DashBoard = () => {
       </div>
 
       {/* Right Section: MonitoringCard, AiMlCard, LoggingCard */}
-      <div className="flex flex-col space-y-4 overflow-y-auto rounded-lg relative">
+      <div className="flex flex-col space-y-4  overflow-y-auto rounded-lg relative">
         <MonitoringCard
           enable={monitoring.enable}
           logFile={monitoring.log_file}

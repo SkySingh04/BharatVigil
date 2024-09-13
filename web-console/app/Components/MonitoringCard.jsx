@@ -71,7 +71,7 @@ const MonitoringCard = ({ enable, logFile, alertThresholds }) => {
     };
   
     return (
-      <div className="bg-black text-white rounded-lg w-[450px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
+      <div className="bg-black text-white rounded-lg w-[500px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
         {isEditing ? (
           <div>
             <ul className="menu bg-base-200 rounded-box w-100 max-w-xs">
@@ -137,7 +137,7 @@ const MonitoringCard = ({ enable, logFile, alertThresholds }) => {
                         <li>
                             <div className="flex items-start">
                             <div>
-             <h3 className="text-lg font-semibold">Monitoring Configuration</h3>
+             <h3 className="text-lg text-info font-semibold">Monitoring Configuration</h3>
             <ul className="menu bg-base-200 rounded-box w-100">
               <li><a>
                 <strong>Enable Monitoring:</strong> {formData.enable ? 'Yes' : 'No'}</a>
