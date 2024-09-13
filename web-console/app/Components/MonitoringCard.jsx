@@ -71,7 +71,7 @@ const MonitoringCard = ({ enable, logFile, alertThresholds }) => {
     };
   
     return (
-      <div className="bg-black text-white rounded-lg p-4 m-4 shadow-lg border border-white border-opacity-20 border-[1px] relative">
+      <div className="bg-black text-white rounded-lg w-[450px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
         {isEditing ? (
           <div>
             <ul className="menu bg-base-200 rounded-box w-100 max-w-xs">

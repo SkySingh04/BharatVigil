@@ -67,31 +67,6 @@ const PostCard = ({
                         }
                     ]
                 },
-                endpoints: [
-                    // You can add endpoint details here if needed
-                ],
-                web_console: {
-                    port: 8080,
-                    allowed_ips: [
-                        "192.168.1.1"
-                    ],
-                    blocked_ips: [],
-                    admin_users: [
-                        "admin"
-                    ],
-                },
-                logging: {
-                    log_level: "info",
-                    log_file: "/var/log/firewall-tool.log",
-                    max_size: 100,
-                    max_backups: 3,
-                    max_age: 30,
-                },
-                network: {
-                    enable_deep_packet_inspection: true,
-                    self_signed_tls_cert: "/path/to/self-signed-cert.pem",
-                    proxy_enabled: true,
-                }
             };
 
             console.log('Sending data to server:', jsonData);
@@ -118,7 +93,7 @@ const PostCard = ({
     };
 
     return (
-        <div className="bg-black text-white rounded-lg p-4 m-4 shadow-lg border border-white border-opacity-20 border-[1px] relative">
+        <div className="bg-black text-white rounded-lg w-[400px] shadow-lg border border-white border-opacity-20 border-[1px] relative">
             {isEditing ? (
                 <div>
                 <ul className="menu bg-base-200 rounded-box w-100 max-w-xs">
@@ -142,7 +117,7 @@ const PostCard = ({
                             name="allowedDomains"
                             value={formData.allowedDomains}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral w-100"
+                            className="p-2 input input-bordered input-neutral "
                         />
                         </a>
                     </li>
@@ -154,7 +129,7 @@ const PostCard = ({
                             name="blockedDomains"
                             value={formData.blockedDomains}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral w-100"
+                            className="p-2 input input-bordered input-neutral "
                         />
                         </a>
                     </li>
@@ -166,7 +141,7 @@ const PostCard = ({
                             name="allowedIps"
                             value={formData.allowedIps}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral w-100"
+                            className="p-2 input input-bordered input-neutral "
                         />
                         </a>
                     </li>
@@ -178,7 +153,7 @@ const PostCard = ({
                             name="blockedIps"
                             value={formData.blockedIps}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral w-100"
+                            className="p-2 input input-bordered input-neutral"
                         />
                         </a>
                     </li>
@@ -190,7 +165,7 @@ const PostCard = ({
                             name="protocols"
                             value={formData.protocols}
                             onChange={handleInputChange}
-                            className="p-2 input input-bordered input-neutral w-100"
+                            className="p-2 input input-bordered input-neutral w-80"
                         />
                         </a>
                     </li>
@@ -210,10 +185,9 @@ const PostCard = ({
             ) : (
                 <div className='mt-4'>
                 
-                    <ul className="menu bg-base-200 rounded-box w-100">
+                    <ul className="menu bg-base-200 rounded-box w-90">
                         <li>
                             <div className="flex items-start">
-                            <img src="/path-to-your-icon.png" alt="Icon" className="w-8 h-8 mr-3" />
                             <div>
                                 <h3 className="text-lg font-semibold">{formData.application}</h3>
                                 <ul className="menu bg-base-200 rounded-box w-full max-w-xs">

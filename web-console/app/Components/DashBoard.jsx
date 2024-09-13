@@ -16,6 +16,7 @@ const DashBoard = () => {
   const[endpoints, setEndpoints] = useState([]); // State for endpoints
   const [requests, setRequests] = useState([]); // State for requests
   const [loadingRequests, setLoadingRequests] = useState(true); // Loading state for requests
+  const [isRequestScreenOpen, setIsRequestScreenOpen] = useState(false); // State for request screen
   
 
   // Fetch firewall rules from backend
@@ -172,16 +173,19 @@ const DashBoard = () => {
     };
   }, []);
 
-  // Handler to refresh the requests list manually
-  const handleRefresh = () => {
-    setLoadingRequests(true); // Show loading while fetching
-    fetchRequests(); // Re-fetch requests from the backend
+  const handleRequestOpen = () => {
+    setIsRequestScreenOpen(true);
+  };
+
+  // Function to handle closing the screen
+  const handleRequestClose = () => {
+    setIsRequestScreenOpen(false);
   };
 
   return (
-    <div className="bg-black grid grid-cols-4 gap-4">
+    <div className="bg-black grid grid-cols-4 gap-4 mt-6">
     {/* Left Section */}
-    <div className="w-8 bg-black p-2 flex flex-col items-center h-full fixed left-0 top-0 mt-2">
+    <div className="w-8 bg-black p-2 flex flex-col items-center h-full fixed left-0 top-0 ">
     {/* Icon Buttons */}
     <div className="flex-1 flex flex-col items-center gap-4">
       <FaBell size={24} className="hover:text-green-400 cursor-pointer" />
@@ -255,115 +259,94 @@ const DashBoard = () => {
 
   {/* Middle Section */}
   <div className="col-span-3 p-6 flex flex-col bg-black h-screen">
-    <div className="h-full rounded-lg flex flex-col justify-between">
-      <div className="grid grid-cols-2 gap-4 h-full">
-        {/* Left Section: PostCard with Scroll */}
-        <div className="h-full overflow-y-auto rounded-lg">
-          <div className="space-y-4">
-            {rules.map((rule, index) => (
-              <PostCard
-                key={rule.id || index}
-                application={rule.application}
-                allowedDomains={rule.allowed_domains}
-                blockedDomains={rule.blocked_domains}
-                allowedIps={rule.allowed_ips}
-                blockedIps={rule.blocked_ips}
-                protocols={rule.protocols}
-              />
-            ))}
-          </div>
+  <div className="h-full rounded-lg flex flex-col justify-between relative">
+    <div className="grid grid-cols-2 gap-4 h-full">
+      {/* Left Section: PostCard with Scroll */}
+      <div className="h-full overflow-y-auto rounded-lg">
+        <div className="space-y-4">
+          {rules.map((rule) => (
+            <PostCard
+              key={rule.id}
+              application={rule.application}
+              allowedDomains={rule.allowed_domains}
+              blockedDomains={rule.blocked_domains}
+              allowedIps={rule.allowed_ips}
+              blockedIps={rule.blocked_ips}
+              protocols={rule.protocols}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Right Section: MonitoringCard, AiMlCard, LoggingCard */}
+      <div className="flex flex-col space-y-4 overflow-y-auto rounded-lg relative">
+        <MonitoringCard
+          enable={monitoring.enable}
+          logFile={monitoring.log_file}
+          alertThresholds={monitoring.alert_thresholds}
+        />
+        <AiMlCard
+          modelEndpoint={AiMl.model_endpoint}
+          enableAnomaly={AiMl.enable_anomaly_detection}
+        />
+        <LoggingCard
+          logLevel={logging.log_level}
+          logFile={logging.log_file}
+          maxSize={logging.max_size}
+          maxBackups={logging.max_backups}
+          maxAge={logging.max_age}
+        />
+        {/* Requests Button */}
+        <div className="flex justify-center">
+          <button 
+            className="btn btn-info btn-outline mt-4"
+            onClick={handleRequestOpen}
+          >
+            Requests
+          </button>
         </div>
 
-        {/* Right Section: MonitoringCard, AiMlCard, LoggingCard */}
-        <div className="flex flex-col space-y-4 overflow-y-auto rounded-lg">
-          <MonitoringCard
-            enable={monitoring.enable}
-            logFile={monitoring.log_file}
-            alertThresholds={monitoring.alert_thresholds}
-          />
-          <AiMlCard
-            modelEndpoint={AiMl.model_endpoint}
-            enableAnomaly={AiMl.enable_anomaly_detection}
-          />
-          <LoggingCard
-            logLevel={logging.log_level}
-            logFile={logging.log_file}
-            maxSize={logging.max_size}
-            maxBackups={logging.max_backups}
-            maxAge={logging.max_age}
-          />
+        {isRequestScreenOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+          <div className="bg-gray-800 p-6 rounded-lg max-w-lg w-full">
+            {/* Loading State */}
+            {loadingRequests ? (
+              <div className="text-white loading loading-infinity loading-lg">Loading requests</div>
+            ) : requests.length > 0 ? (
+              <div className="overflow-y-auto w-full h-80">
+                {/* Request List */}
+                {requests.slice().reverse().map((request) => (
+                  <div key={request.no} className="bg-base-100 hover:bg-base-300 border-b border-white border-opacity-20 text-white p-4">
+                    <div className="flex flex-wrap items-center gap-4">
+                      <span className="text-sm">
+                        <strong>Time:</strong> {request.time}
+                      </span>
+                      <span className="text-sm">
+                        <strong>Source:</strong> {request.source} {'-->'} <strong>Destination:</strong> {request.destination}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-white">No requests found.</div>
+            )}
+
+            {/* Close Button */}
+            <div className="flex justify-end mt-4">
+              <button 
+                className="btn btn-error btn-outline"
+                onClick={handleRequestClose}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
+      )}
       </div>
     </div>
   </div>
-
-{/* Bottom Section */}
-<div className="bg-black p-2 flex flex-col items-center border-t border-white border-opacity-20 gap-4 mt-4 w-screen overflow-y-auto h-80">
-  <strong className="text-white mb-4">Requests</strong>
-
-  {/* Refresh Button */}
-  <button className="btn btn-info btn-outline" onClick={handleRefresh}>
-    Refresh Requests
-  </button>
-
-  {/* Loading State */}
-  {loadingRequests ? (
-    <div className="text-white loading loading-infinity loading-lg">Loading requests</div>
-  ) : requests.length > 0 ? (
-    <div className="overflow-x-auto w-full">
-      <table className="table-auto bg-base-200 rounded-box w-full border border-white border-opacity-20 overflow-y-auto h-80">
-        {/* Table Head */}
-        <thead className="bg-gray-800 text-white">
-          <tr className="text-left">
-            <th className="px-6 py-3">Request No</th>
-            <th className="px-6 py-3">Time</th>
-            <th className="px-6 py-3">Source</th>
-            <th className="px-6 py-3">Destination</th>
-            <th className="px-6 py-3">Details</th>
-          </tr>
-        </thead>
-
-        {/* Table Body */}
-        <tbody>
-          {requests.slice().reverse().map((request, index) => (
-            <tr key={request.no} className="bg-base-100 hover:bg-base-300 border-b border-white border-opacity-20 text-white">
-              <td className="px-6 py-3">{request.no}</td>
-              <td className="px-6 py-3">{request.time}</td>
-              <td className="px-6 py-3">{request.source}</td>
-              <td className="px-6 py-3">{request.destination}</td>
-              <td className="px-6 py-3">
-                {/* Dropdown for Additional Details */}
-                <div className="dropdown dropdown-hover">
-                  <div tabIndex={0} role="button" className="btn btn-sm btn-outline">
-                    Details
-                  </div>
-                  <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                    <li>
-                      <a className="text-sm">
-                        <strong>Protocol:</strong> {request.protocol}
-                      </a>
-                    </li>
-                    <li>
-                      <a className="text-sm">
-                        <strong>Length:</strong> {request.length}
-                      </a>
-                    </li>
-                    <li>
-                      <a className="text-sm">
-                        <strong>Info:</strong> {request.info}
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  ) : (
-    <div className="text-white">No requests found.</div>
-  )}
 </div>
 
 </div>
