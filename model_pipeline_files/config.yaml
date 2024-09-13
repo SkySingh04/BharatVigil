@@ -1,0 +1,27 @@
+splitcap:
+  Splitcap_location: model_pipeline_files/
+  Duration_of_collecting_pcap: 10
+  Directory_store_pcap:  model_pipeline_files/packets/
+  Directory_store_actual_pcap: model_pipeline_files/packets/captured_packets/
+  Directory_session_wise_split_pcap: model_pipeline_files/packets/session_wise_packets/
+  deletion_after_split: true  # Shells False and True
+  # dont know if it works correctly or not
+
+deletion_packet:
+  deletion_time: 100
+png_param:
+  png_saving_dir: model_pipeline_files/data/pngs/
+  png_size: 28
+  pcap_deletion: False  # python's False and True
+  threads_alloc: 5
+  matrix_size: 784 
+mnist_param:
+  mnist_saving_dir: model_pipeline_files/data/mnist/
+  png_deletion: False
+model:
+  model_dir_packet_data:  model_pipeline_files/models/packet_data/  #my model
+  model_dir_packet_features:model_pipeline_files/models/packet_features/  #bhuvan model
+  batch_size: 64
+  model_dim: 28
+  num_classes: 1
+  cuda_code: cpu # can be set none for automatically setting cpu for cput processing cuda for gpu processing
