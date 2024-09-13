@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import PostCard from "./PostCard";
 import MonitoringCard from "./MonitoringCard";
 import AiMlCard from "./AiMlCard";
@@ -7,6 +7,7 @@ import LoggingCard from "./LoggingCard";
 
 import yaml from "js-yaml";
 import { FaBell, FaExclamationTriangle, FaCog, FaSignOutAlt } from "react-icons/fa";
+import Terminal from "./Terminal";
 
 const DashBoard = () => {
   const [rules, setRules] = useState([]);
@@ -14,9 +15,6 @@ const DashBoard = () => {
   const [AiMl, setAiMl] = useState({}); // State for AI/ML configuration
   const[logging, setLogging] = useState({}); // State for logging configuration
   const[endpoints, setEndpoints] = useState([]); // State for endpoints
-  const [requests, setRequests] = useState([]); // State for requests
-  const [loadingRequests, setLoadingRequests] = useState(true); // Loading state for requests
-  const [isRequestScreenOpen, setIsRequestScreenOpen] = useState(false); // State for request screen
   
 
   // Fetch firewall rules from backend
@@ -132,55 +130,8 @@ const DashBoard = () => {
   }, []);
 
   // Reusable function to fetch the list of requests (from /requests)
-  const fetchRequests = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/requests");
-      if (!response.ok) {
-        throw new Error("Failed to fetch requests");
-      }
-      const data = await response.json();
-      setRequests(data);
-      setLoadingRequests(false); 
-    } catch (error) {
-      console.error("Error fetching requests:", error);
-      setLoadingRequests(false); // Stop loading on error
-    }
-  };
+  
 
-  // Fetch initial requests on component load
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  // Use SSE to fetch real-time events from the backend (using /events endpoint)
-  useEffect(() => {
-    const eventSource = new EventSource("http://localhost:8080/events");
-    console.log("SSE connection opened", eventSource);
-
-    eventSource.onmessage = (event) => {
-      console.log("New SSE event:", event.data); // Log event data
-      const data = JSON.parse(event.data);
-      setRequests((prevRequests) => [...prevRequests, data]);
-    };
-
-    eventSource.onerror = (error) => {
-      console.error("SSE Error:", error); // Log error
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close(); // Clean up
-    };
-  }, []);
-
-  const handleRequestOpen = () => {
-    setIsRequestScreenOpen(true);
-  };
-
-  // Function to handle closing the screen
-  const handleRequestClose = () => {
-    setIsRequestScreenOpen(false);
-  };
 
   return (
     <div className="bg-black grid grid-cols-4 gap-4 mt-6">
@@ -296,58 +247,11 @@ const DashBoard = () => {
           maxBackups={logging.max_backups}
           maxAge={logging.max_age}
         />
-        {/* Requests Button */}
-        <div className="flex justify-center">
-          <button 
-            className="btn btn-info btn-outline mt-4"
-            onClick={handleRequestOpen}
-          >
-            Requests
-          </button>
-        </div>
-
-        {isRequestScreenOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center">
-          <div className="bg-gray-800 p-6 rounded-lg max-w-lg w-full">
-            {/* Loading State */}
-            {loadingRequests ? (
-              <div className="text-white loading loading-infinity loading-lg">Loading requests</div>
-            ) : requests.length > 0 ? (
-              <div className="overflow-y-auto w-full h-80">
-                {/* Request List */}
-                {requests.slice().reverse().map((request) => (
-                  <div key={request.no} className="bg-base-100 hover:bg-base-300 border-b border-white border-opacity-20 text-white p-4">
-                    <div className="flex flex-wrap items-center gap-4">
-                      <span className="text-sm">
-                        <strong>Time:</strong> {request.time}
-                      </span>
-                      <span className="text-sm">
-                        <strong>Source:</strong> {request.source} {'-->'} <strong>Destination:</strong> {request.destination}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-white">No requests found.</div>
-            )}
-
-            {/* Close Button */}
-            <div className="flex justify-end mt-4">
-              <button 
-                className="btn btn-error btn-outline"
-                onClick={handleRequestClose}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       </div>
     </div>
   </div>
 </div>
+<Terminal />
 
 </div>
   );
