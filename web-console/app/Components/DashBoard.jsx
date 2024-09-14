@@ -134,7 +134,7 @@ const DashBoard = () => {
 
 
   return (
-    <div className="bg-black grid grid-cols-4 gap-4 mt-6">
+    <div className="bg-black grid grid-cols-4 gap-4 mt-6 h-screen">
     {/* Left Section */}
     <div className="w-8 bg-black p-2 flex flex-col items-center h-full fixed left-0 top-0 ">
     {/* Icon Buttons */}
@@ -144,9 +144,9 @@ const DashBoard = () => {
       <FaCog size={24} className="hover:text-green-400 cursor-pointer" />
     </div>
     {/* Logout Button */}
-    <div className="mt-auto">
+    {/* <div className="mt-auto">
       <FaSignOutAlt size={24} className="hover:text-red-400 cursor-pointer" />
-    </div>
+    </div> */}
   </div>
 
   {/* Main Content Section */}

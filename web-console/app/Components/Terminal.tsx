@@ -57,8 +57,8 @@ export default function Terminal() {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && terminalRef.current) {
-        const terminalTop = terminalRef.current.getBoundingClientRect().top;
-        const newHeight = e.clientY - terminalTop; // Calculate new height based on top drag
+        const terminalBottom = terminalRef.current.getBoundingClientRect().bottom;
+        const newHeight = terminalBottom - e.clientY; // Calculate new height based on bottom drag
         setHeight(Math.max(100, Math.min(newHeight, window.innerHeight - 50))); // Restrict min/max heights
       }
     };
@@ -85,43 +85,43 @@ export default function Terminal() {
 
   return (
     <div
-    ref={terminalRef}
-    className="bg-black text-white font-mono text-sm absolute bottom-0 w-full"
-    style={{ height: `${height}px` }}
-  >
-    <div
-      ref={dragHandleRef}
-      className="h-2 bg-gray-700 cursor-ns-resize"
-      onMouseDown={handleMouseDown}
-    />
-    <div className="p-4 overflow-auto" style={{ height: `${height - 8}px` }}>
-      {loadingRequests ? (
-        <div className="text-white loading loading-infinity loading-lg">
-          Loading requests...
-        </div>
-      ) : requests.length > 0 ? (
-        <div className="overflow-y-auto w-full h-full">
-          {requests.slice().reverse().map((request) => (
-            <div
-              key={request.no}
-              className="bg-base-100 hover:bg-base-300 border-b border-white border-opacity-20 text-white p-4"
-            >
-              <div className="flex flex-wrap items-center gap-4">
-                <span className="text-sm">
-                  <strong>Time:</strong> {request.time}
-                </span>
-                <span className="text-sm">
-                  <strong>Source:</strong> {request.source} {"-->"}
-                  <strong> Destination:</strong> {request.destination}
-                </span>
+      ref={terminalRef}
+      className="bg-black text-white font-mono text-sm absolute bottom-0 w-full"
+      style={{ height: `${height}px` }}
+    >
+      <div
+        ref={dragHandleRef}
+        className="h-2 bg-gray-700 cursor-ns-resize"
+        onMouseDown={handleMouseDown}
+      />
+      <div className="p-4 overflow-auto" style={{ height: `${height - 8}px` }}>
+        {loadingRequests ? (
+          <div className="text-white loading loading-infinity loading-lg">
+            Loading requests...
+          </div>
+        ) : requests.length > 0 ? (
+          <div className="overflow-y-auto w-full h-full">
+            {requests.slice().reverse().map((request) => (
+              <div
+                key={request.no}
+                className="bg-base-100 hover:bg-base-300 border-b border-white border-opacity-20 text-white p-4"
+              >
+                <div className="flex flex-wrap items-center gap-4">
+                  <span className="text-sm">
+                    <strong>Time:</strong> {request.time}
+                  </span>
+                  <span className="text-sm">
+                    <strong>Source:</strong> {request.source} {"-->"}
+                    <strong> Destination:</strong> {request.destination}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-white">No requests found.</div>
-      )}
-    </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-white">No requests found.</div>
+        )}
+      </div>
     </div>
   );
 }
