@@ -8,3 +8,9 @@ model_pipeline_files/__pycache__
 
 #venv file 
 model_pipeline_files/sih
+
+#temp directory
+temp
+
+#.venv directory
+.venv

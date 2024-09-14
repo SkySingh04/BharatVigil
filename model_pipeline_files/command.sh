@@ -52,7 +52,7 @@ listen_packets() {
     
   
     sudo tcpdump -w "$pcap_file" -G $time -W 1
-    chmod 755 "$pcap_file"
+    #chmod 755 "$pcap_file"
 
     echo "$pcap_file" > $fifo
     echo "Added $pcap_file to the queue"
@@ -71,7 +71,7 @@ split_packets() {
       
       
       sudo "$splitcap_actual_loc" -r $pcap_file -s session -o "$session_file"
-       chmod 755 "$session_file"
+       #chmod 755 "$session_file"
       echo "$session_file" > $fifo1
       if [ "$deletion_flag" = true ]; then 
 
@@ -87,18 +87,22 @@ make_png_mnist(){
    
      if read pcap_file < $fifo1; then
         echo $pcap_file
-        taskset -c 0-$((data_thread-1)) python3 session2png.py $pcap_file
+        taskset -c 0-$((data_thread-1)) python3 session2png_mnsit.py $pcap_file
       fi
   done
 
 
 }
 
+make_prediction(){
+  python3 inferencer.py
+}
 
 
 
 listen_packets &  
 split_packets &   
 make_png_mnist &
+make_prediction &
 
 wait
