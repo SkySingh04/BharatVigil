@@ -1,0 +1,21 @@
+version: "3"
+services:
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - "8086:8086"  # InfluxDB UI/API accessible on port 8086
+    volumes:
+      - influxdb-storage:/var/lib/influxdb2  # Persist data in named volume
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin  # Replace with your desired admin username
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin-password  # Replace with a strong password
+      - DOCKER_INFLUXDB_INIT_ORG=my-org  # Replace with your desired organization name
+      - DOCKER_INFLUXDB_INIT_BUCKET=my-bucket  # Replace with your desired bucket name
+      - DOCKER_INFLUXDB_INIT_RETENTION=7d  # Optional: Set data retention period (7 days here)
+      - INFLUXDB_HTTP_AUTH_ENABLED=true  # Enable authentication
+
+volumes:
+  influxdb-storage:
+    driver: local  # Persists data locally on host

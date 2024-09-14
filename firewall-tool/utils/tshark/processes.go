@@ -2,6 +2,7 @@ package tshark
 
 import (
 	"bufio"
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -11,13 +12,24 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var sseChan = make(chan string)
+var (
+	token        = "DdN2Og1zAp3Y-Ztc4g6RkPsSy2wkAkLUqdvJVy6YbHTdGrvFDYnETNM5qU4Hmuft0zkJzVFnoen6ttMz6d53ww=="
+	url          = "http://localhost:8086"
+	influxClient = influxdb2.NewClient(url, token)
+	// influxWriteAPIBlocking influxdb2.WriteAPIBlocking
+	sseChan                = make(chan string)
+	influxWriteAPIBlocking = influxClient.WriteAPIBlocking("my-org", "my-bucket") // Synchronous write
 
+)
+
+// TsharkData struct to hold parsed data
 type TsharkData struct {
 	No          int    `json:"no"`
 	Time        string `json:"time"`
@@ -26,6 +38,37 @@ type TsharkData struct {
 	Protocol    string `json:"protocol"`
 	Length      int    `json:"length"`
 	Info        string `json:"info"`
+}
+
+// Close InfluxDB client connection
+func closeInfluxDB() {
+	influxClient.Close()
+}
+
+// Function to insert data into InfluxDB
+func InsertIntoInfluxDB(data TsharkData) error {
+	// Parse time for InfluxDB
+	timestamp, err := time.Parse("15:04:05", data.Time)
+	if err != nil {
+		return fmt.Errorf("error parsing time: %v", err)
+	}
+
+	// Create an InfluxDB point with the parsed Tshark data
+	point := influxdb2.NewPointWithMeasurement("tshark_data").
+		AddTag("protocol", data.Protocol).
+		AddTag("source", data.Source).
+		AddTag("destination", data.Destination).
+		AddField("length", data.Length).
+		AddField("info", data.Info).
+		SetTime(timestamp)
+
+	// Write the point synchronously
+	err = influxWriteAPIBlocking.WritePoint(context.Background(), point)
+	if err != nil {
+		return fmt.Errorf("error writing to InfluxDB: %v", err)
+	}
+
+	return nil
 }
 
 func parseTsharkOutput(line string) (TsharkData, error) {
@@ -120,7 +163,10 @@ func StartTshark(outputFile string) error {
 		return fmt.Errorf("failed to start tshark: %v", err)
 	}
 
+	// initInfluxDB() // Initialize InfluxDB before starting the process
+
 	go func() {
+		defer closeInfluxDB() // Close InfluxDB connection when done
 		scanner := bufio.NewScanner(stdout)
 		for scanner.Scan() {
 			line := scanner.Text()
@@ -136,10 +182,15 @@ func StartTshark(outputFile string) error {
 			}
 			sseChan <- string(jsonData)
 
-			// Insert data into the database
+			// Insert data into SQLite
 			dbFile := "firewall.db"
 			if err := InsertTsharkData(dbFile, data); err != nil {
-				fmt.Printf("Failed to insert data into the database: %v\n", err)
+				fmt.Printf("Failed to insert data into SQLite database: %v\n", err)
+			}
+
+			// Insert data into InfluxDB
+			if err := InsertIntoInfluxDB(data); err != nil {
+				fmt.Printf("Failed to insert data into InfluxDB: %v\n", err)
 			}
 		}
 		if err := scanner.Err(); err != nil {
@@ -197,3 +248,25 @@ func InsertTsharkData(dbFile string, data TsharkData) error {
 
 	return nil
 }
+
+// func InsertIntoInfluxDB(data TsharkData) error {
+//     timestamp, err := time.Parse("15:04:05", data.Time)
+//     if err != nil {
+//         return fmt.Errorf("error parsing time: %v", err)
+//     }
+
+//     point := influxdb2.NewPointWithMeasurement("tshark_data").
+//         AddTag("protocol", data.Protocol).
+//         AddTag("source", data.Source).
+//         AddTag("destination", data.Destination).
+//         AddField("length", data.Length).
+//         AddField("info", data.Info).
+//         SetTime(timestamp)
+
+//     err = influxWriteAPIBlocking.WritePoint(context.Background(), point)
+//     if err != nil {
+//         return fmt.Errorf("error writing to InfluxDB: %v", err)
+//     }
+
+//     return nil
+// }
