@@ -81,9 +81,8 @@ class inferencer:
         # data_load=self.load_ubyte(input_file)
         # mn_data=MNIST(input_file)
         # data_load=mn_data.load_training()
-        data_load=data_load.to(self.device)
-        output=self.model.forward(data_load,inference=True)
-        print(output)
+        output=self.model.forward(data_load.to(self.device),inference=True)
+        print(output)   
         #self.model.forward()
 
 if __name__=="__main__":

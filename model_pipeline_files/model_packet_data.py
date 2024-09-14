@@ -54,9 +54,6 @@ class Model(nn.Module):
       x=self.dropout(x)
     x = self.lin2(x)
     if self.num_class > 1:
-      x=torch.softmax(x,dim=-1)
-   
-    x=torch.sigmoid(x)
-    x=torch.round(x)
-    return x
+      return torch.softmax(x,dim=-1)
+    return torch.round(torch.sigmoid(x))
 # Model(28,1)
