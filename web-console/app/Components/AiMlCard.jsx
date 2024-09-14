@@ -107,7 +107,7 @@ const AiMlCard = ({ modelEndpoint = '', enableAnomaly = false }) => {
                         <li>
                             <div className="flex items-start">
                             <div>
-             <h3 className="text-lg text-info font-semibold">AI-Ml Configuration</h3>
+             <h3 className="text-lg font-semibold">AI-Ml Configuration</h3>
             <ul className="menu bg-base-200 rounded-box w-100">
               <li><a>
                 <strong>model endpoint:</strong> {formData.modelEndpoint}</a>

@@ -189,7 +189,7 @@ const PostCard = ({
                         <li>
                             <div className="flex items-start">
                             <div>
-                                <h3 className="text-lg text-info font-semibold">{formData.application}</h3>
+                                <h3 className="text-lg font-semibold">{formData.application}</h3>
                                 <ul className="menu bg-base-200 rounded-box w-full max-w-xs">
                                 <li>
                                     <a className="text-sm mt-2">
