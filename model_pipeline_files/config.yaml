@@ -14,8 +14,10 @@ png_param:
   png_size: 28
   pcap_deletion: False  # python's False and True
   threads_alloc: 5
-  matrix_size: 784 
+  matrix_size: 784
+  trim: True
 mnist_param:
+  mnist_creation: True
   mnist_saving_dir: model_pipeline_files/data/mnist/
   png_deletion: False
 model:
