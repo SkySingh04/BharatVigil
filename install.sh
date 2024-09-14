@@ -5,7 +5,7 @@ installBharatVigil() {
 
     # Clone the repository containing docker-compose.yml
     git clone https://github.com/SkySingh04/BharatVigil.git /tmp/BharatVigilApp || {
-        echo "Failed to clone the Bharat Vigil repository."
+        echo "Failed to clone the BharatVigil repository."
         exit 1
     }
 
@@ -23,28 +23,28 @@ installBharatVigil() {
     docker-compose up -d
 
     # Create an alias for starting the app with Docker Compose
-    alias_cmd="alias bharatvigil-start='cd /tmp/BharatVigilApp && docker-compose up -d'"
+    alias_cmd="alias BharatVigil='cd /tmp/BharatVigilApp && docker-compose up -d'"
     
     # Add alias to shell configuration file based on the user's shell
     current_shell="$(basename "$SHELL")"
     if [[ "$current_shell" == "zsh" ]]; then
-        if ! grep -q "alias bharatvigil-start=" "$HOME/.zshrc"; then
+        if ! grep -q "alias BharatVigil=" "$HOME/.zshrc"; then
             echo "$alias_cmd" >> "$HOME/.zshrc"
         fi
         source "$HOME/.zshrc"
     elif [[ "$current_shell" == "bash" ]]; then
-        if ! grep -q "alias bharatvigil-start=" "$HOME/.bashrc"; then
+        if ! grep -q "alias BharatVigil=" "$HOME/.bashrc"; then
             echo "$alias_cmd" >> "$HOME/.bashrc"
         fi
         source "$HOME/.bashrc"
     else
-        if ! grep -q "alias bharatvigil-start=" "$HOME/.profile"; then
+        if ! grep -q "alias BharatVigil=" "$HOME/.profile"; then
             echo "$alias_cmd" >> "$HOME/.profile"
         fi
         source "$HOME/.profile"
     fi
 
-    echo "Alias 'bharatvigil-start' added! Use 'bharatvigil-start' to run the app."
+    echo "Alias 'BharatVigil' added! Use 'BharatVigil' to run the app."
 }
 
 installBharatVigil
