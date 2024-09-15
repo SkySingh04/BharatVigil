@@ -43,21 +43,21 @@ if [[ ! -p $fifo1 ]]; then
 fi
 
 
-listen_packets() {
-  while true; do
-    timestamp=$(date +%s)
-    pcap_file="$store_pcap/capture_$timestamp.pcap"
+# listen_packets() {
+#   while true; do
+#     timestamp=$(date +%s)
+#     pcap_file="$store_pcap/capture_$timestamp.pcap"
     
-    echo "Starting tcpdump to capture packets at $pcap_file"
+#     echo "Starting tcpdump to capture packets at $pcap_file"
     
   
-    sudo tcpdump -w "$pcap_file" -G $time -W 1
-    #chmod 755 "$pcap_file"
+#     sudo tcpdump -w "$pcap_file" -G $time -W 1
+#     #chmod 755 "$pcap_file"
 
-    echo "$pcap_file" > $fifo
-    echo "Added $pcap_file to the queue"
-  done
-}
+#     echo "$pcap_file" > $fifo
+#     echo "Added $pcap_file to the queue"
+#   done
+# }
 
 split_packets() {
   while true; do
@@ -100,7 +100,7 @@ make_prediction(){
 
 
 
-listen_packets &  
+# listen_packets &  
 split_packets &   
 make_png_mnist &
 make_prediction &
