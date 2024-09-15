@@ -243,7 +243,7 @@ func StartTshark(outputFile string) error {
 
 		// Process and zip the file after renaming
 		go func() {
-			apiURL := "https://e037-35-245-14-76.ngrok-free.app/predict" // Replace with your actual backend API endpoint
+			apiURL := "https://6c97-35-245-14-76.ngrok-free.app/predict" // Replace with your actual backend API endpoint
 			zipFilePath, err := processAndZipPcapFile(oldFile)
 			if err != nil {
 				fmt.Printf("Failed to process and zip PCAP file: %v\n", err)
