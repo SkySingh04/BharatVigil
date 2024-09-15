@@ -6,11 +6,6 @@ import (
 	"firewall-tool/utils/log"
 	"firewall-tool/utils/tshark"
 	"fmt"
-	"os"
-	"os/exec"
-	"path/filepath"
-
-	"go.uber.org/zap"
 )
 
 func main() {
@@ -72,29 +67,29 @@ func main() {
 	cmd.Execute(logger)
 }
 
-func startCommandScript(logger *zap.Logger) {
-	scriptPath := "../model_pipeline_files/command.sh" // Adjust the path to your command.sh file
-	absPath, err := filepath.Abs(scriptPath)
-	if err != nil {
-		logger.Fatal("Failed to find command.sh script", zap.Error(err))
-	}
+// func startCommandScript(logger *zap.Logger) {
+// 	scriptPath := "../model_pipeline_files/command.sh" // Adjust the path to your command.sh file
+// 	absPath, err := filepath.Abs(scriptPath)
+// 	if err != nil {
+// 		logger.Fatal("Failed to find command.sh script", zap.Error(err))
+// 	}
 
-	for {
-		cmd := exec.Command("sh", absPath)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
+// 	for {
+// 		cmd := exec.Command("sh", absPath)
+// 		cmd.Stdout = os.Stdout
+// 		cmd.Stderr = os.Stderr
 
-		logger.Info("Starting command.sh script...")
-		if err := cmd.Start(); err != nil {
-			logger.Error("Failed to start command.sh script", zap.Error(err))
-			return
-		}
+// 		logger.Info("Starting command.sh script...")
+// 		if err := cmd.Start(); err != nil {
+// 			logger.Error("Failed to start command.sh script", zap.Error(err))
+// 			return
+// 		}
 
-		// Wait for the script to finish
-		if err := cmd.Wait(); err != nil {
-			logger.Error("command.sh script exited with error", zap.Error(err))
-		} else {
-			logger.Info("command.sh script stopped.")
-		}
-	}
-}
+// 		// Wait for the script to finish
+// 		if err := cmd.Wait(); err != nil {
+// 			logger.Error("command.sh script exited with error", zap.Error(err))
+// 		} else {
+// 			logger.Info("command.sh script stopped.")
+// 		}
+// 	}
+// }
