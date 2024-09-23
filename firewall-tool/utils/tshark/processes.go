@@ -235,34 +235,36 @@ func processAndZipPcapFile(pcapFilePath string) (string, error) {
 }
 
 func StartTshark(outputFile string) error {
-	// If file exists, rename and send to API
-	if _, err := os.Stat(outputFile); err == nil {
-		oldFile, _ := renameFile(outputFile)
+	// // If file exists, rename and send to API
+	// if _, err := os.Stat(outputFile); err == nil {
+	// 	oldFile, _ := renameFile(outputFile)
 
-		fmt.Printf("Renamed existing file to %s\n", oldFile)
+	// 	fmt.Printf("Renamed existing file to %s\n", oldFile)
 
-		// Process and zip the file after renaming
-		go func() {
-			apiURL := "https://6c97-35-245-14-76.ngrok-free.app/predict" // Replace with your actual backend API endpoint
-			zipFilePath, err := processAndZipPcapFile(oldFile)
-			if err != nil {
-				fmt.Printf("Failed to process and zip PCAP file: %v\n", err)
-				return
-			}
+	// 	// Process and zip the file after renaming
+	// 	go func() {
+	// 		apiURL := "https://373e-35-245-14-76.ngrok-free.app/predict" // Replace with your actual backend API endpoint
+	// 		zipFilePath, err := processAndZipPcapFile(oldFile)
+	// 		if err != nil {
+	// 			fmt.Printf("Failed to process and zip PCAP file: %v\n", err)
+	// 			return
+	// 		}
 
-			if err := uploadPcapZipFile(zipFilePath, apiURL); err != nil {
-				fmt.Printf("Failed to upload zip file: %v\n", err)
-			}
-		}()
-	}
+	// 		if err := uploadPcapZipFile(zipFilePath, apiURL); err != nil {
+	// 			fmt.Printf("Failed to upload zip file: %v\n", err)
+	// 		}
+	// 	}()
+	// }
 
-	file, err := os.OpenFile(outputFile, os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return fmt.Errorf("failed to create file %s: %v", outputFile, err)
-	}
-	file.Close()
+	// file, err := os.OpenFile(outputFile, os.O_CREATE|os.O_WRONLY, 0644)
+	// if err != nil {
+	// 	return fmt.Errorf("failed to create file %s: %v", outputFile, err)
+	// }
+	// file.Close()
 
-	cmd := exec.Command("sudo", "tshark", "-P", "-w", outputFile, "-F", "pcap")
+	// cmd := exec.Command("sudo", "tshark", "-P", "-w", outputFile, "-F", "pcap")
+	//execute a comm.sh file
+	cmd := exec.Command("sh", "./comm.sh")
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return fmt.Errorf("failed to get stdout pipe: %v", err)
