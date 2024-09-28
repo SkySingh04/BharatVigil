@@ -74,7 +74,8 @@ listen_packets() {
 touch $pcap_file
 chmod 777 $pcap_file
 #echo "Listening to $pcap_file"
-sudo tshark -P -a duration:$time -w $pcap_file -F pcap
+my_ip=$( hostname -I )
+sudo tshark -P -a duration:$time -w $pcap_file -f "dst host ${my_ip}" -F pcap
 #sleep $time
     echo "$pcap_file" > $fifo
     #echo "Added $pcap_file to the queue"

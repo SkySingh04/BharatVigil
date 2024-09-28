@@ -20,6 +20,10 @@ def load_config(filename):
         print(f"Error parsing YAML file: {e}")
         return None
 config = load_config('../config.yaml')
+
+def save_config(filename, config_data):
+    with open(filename, 'w') as file:
+        yaml.dump(config_data, file)
 # parser = argparse.ArgumentParser(description='Pass an argument for model inference')
 # parser.add_argument('input_file',type=str,help="path of the input_file")
 fifo_path ='/tmp/mnist2model_queue'
@@ -110,12 +114,23 @@ class inferencer:
         for batch_no in range(len(data_load)):
             output.append(self.model.forward(data_load[batch_no],inference=True))
         
-        
+        png_file_list=glob.glob(os.path.join(input_dir,"*.png"))
         output_t=torch.cat(output,dim=0)
-        with open("file_output.txt","a+") as f:
-            f.write(str(output_t))
-        f.close()
-        print(output_t)
+        for i in range(len(png_file_list)):
+            blocked_ips=[]
+            if output_t[i]==1:
+                # with open("file_output.txt","a+") as f:
+                blocked_ips+=[str(os.path.basename(png_file_list[i]).split("_")[2].replace("-","."))]
+        blocked_ips=set(blocked_ips)
+        config=load_config('../config.yaml')
+        already_blocked=set(config['firewall']['rules'][0]['blocked_ips'])
+        already_blocked=list(already_blocked.union(blocked_ips))
+        config['firewall']['rules'][0]['blocked_ips']=already_blocked
+        save_config("../config.yaml", config)
+
+
+        
+        # print(output_t)
         #self.model.forward()
 
 if __name__=="__main__":

@@ -1,102 +1,104 @@
+ai_ml:
+  enable_anomaly_detection: true
+  model_endpoint: http://localhost:5000/predict
+deletion_packet:
+  deletion_time: 100
+endpoints:
+- hostname: endpoint1.local
+  id: endpoint-1
+  ip_address: 192.168.1.100
+  os: Windows
+- hostname: endpoint2.local
+  id: endpoint-2
+  ip_address: 192.168.1.101
+  os: Linux
 firewall:
   rules:
-  - id: 1
-    application: brave
-    allowed_domains:
+  - allowed_domains:
     - google.com
     - example.com
-    blocked_domains:
-    - shady.com
     allowed_ips:
     - 192.168.1.1
+    application: brave
+    blocked_domains:
+    - shady.com
     blocked_ips:
+    - 13.69.116.109
+    - 35.174.127.31
+    - 142.251.42.14
+    - 192.168.0.1
+    - 103.57.86.142
     - 10.0.0.1
+    - 31.13.79.35
+    id: 1
     protocols:
     - TCP
     - UDP
-  - id: 2
-    application: VSCode
-    allowed_domains:
+  - allowed_domains:
     - microsoft.com
-    blocked_domains: []
     allowed_ips: []
+    application: VSCode
+    blocked_domains: []
     blocked_ips: []
+    id: 2
     protocols:
     - TCP
-  - id: 0
-    application: VSCode
-    allowed_domains:
+  - allowed_domains:
     - microsoft.com
-    blocked_domains: []
     allowed_ips: []
+    application: VSCode
+    blocked_domains: []
     blocked_ips: []
+    id: 0
     protocols:
     - TCP
+logging:
+  log_file: /var/log/firewall-tool.log
+  log_level: info
+  max_age: 30
+  max_backups: 3
+  max_size: 100
+mnist_param:
+  mnist_creation: true
+  mnist_saving_dir: ../model_pipeline_files/data/mnist/
+  png_deletion: false
+model:
+  batch_size: 64
+  cuda_code: cpu
+  model_dim: 28
+  model_dir_packet_data: ../model_pipeline_files/models/packet_data/model1.pth
+  model_dir_packet_features: ../model_pipeline_files/models/packet_features/
+  model_python_file_loc: ../model_pipeline_files/inferencer.py
+  num_classes: 1
 monitoring:
-  enable: true
-  log_file: /var/log/firewall-monitor.log
   alert_thresholds:
     abnormal_traffic: 1000
     blocked_attempts: 10
-ai_ml:
-  model_endpoint: http://localhost:5000/predict
-  enable_anomaly_detection: true
-endpoints:
-- id: endpoint-1
-  os: Windows
-  ip_address: 192.168.1.100
-  hostname: endpoint1.local
-- id: endpoint-2
-  os: Linux
-  ip_address: 192.168.1.101
-  hostname: endpoint2.local
+  enable: true
+  log_file: /var/log/firewall-monitor.log
+network:
+  enable_deep_packet_inspection: true
+  proxy_enabled: true
+  self_signed_tls_cert: /path/to/self-signed-cert.pem
+png_param:
+  matrix_size: 784
+  pcap_deletion: false
+  png_saving_dir: ../model_pipeline_files/data/pngs/
+  png_size: 28
+  python_file_loc: ../model_pipeline_files/session2png_mnsit.py
+  threads_alloc: 5
+  trim: true
+splitcap:
+  Directory_session_wise_split_pcap: ../model_pipeline_files/packets/session_wise_packets/
+  Directory_store_actual_pcap: ../model_pipeline_files/packets/captured_packets/
+  Directory_store_pcap: ../model_pipeline_files/packets/
+  Duration_of_collecting_pcap: 10
+  Splitcap_location: ../model_pipeline_files/
+  deletion_after_split: true
 web_console:
-  port: 8080
+  admin_users:
+  - admin
   allowed_ips:
   - 192.168.1.1
   blocked_ips: []
-  admin_users:
-  - admin
-logging:
-  log_level: info
-  log_file: /var/log/firewall-tool.log
-  max_size: 100
-  max_backups: 3
-  max_age: 30
-network:
-  enable_deep_packet_inspection: true
-  self_signed_tls_cert: /path/to/self-signed-cert.pem
-  proxy_enabled: true
-
-splitcap:
-  Splitcap_location: ../model_pipeline_files/
-  Duration_of_collecting_pcap: 10
-  Directory_store_pcap:  ../model_pipeline_files/packets/
-  Directory_store_actual_pcap: ../model_pipeline_files/packets/captured_packets/
-  Directory_session_wise_split_pcap: ../model_pipeline_files/packets/session_wise_packets/
-  deletion_after_split: true  # Shells False and True
-  # dont know if it works correctly or not
-
-deletion_packet:
-  deletion_time: 100
-png_param:
-  python_file_loc: ../model_pipeline_files/session2png_mnsit.py
-  png_saving_dir: ../model_pipeline_files/data/pngs/
-  png_size: 28
-  pcap_deletion: False  # python's False and True
-  threads_alloc: 5
-  matrix_size: 784
-  trim: True
-mnist_param:
-  mnist_creation: True
-  mnist_saving_dir: ../model_pipeline_files/data/mnist/
-  png_deletion: False
-model:
-  model_python_file_loc: ../model_pipeline_files/inferencer.py
-  model_dir_packet_data:  ../model_pipeline_files/models/packet_data/model1.pth  #my model
-  model_dir_packet_features: ../model_pipeline_files/models/packet_features/  #bhuvan model
-  batch_size: 64
-  model_dim: 28
-  num_classes: 1
-  cuda_code: cpu # can be set none for automatically setting cpu for cput processing cuda for gpu processing
-
+  port: 8080
