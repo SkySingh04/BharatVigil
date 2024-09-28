@@ -72,10 +72,13 @@ class inferencer:
             img_array=np.array(img,dtype=np.uint8)
             hex_image_array = np.vectorize(lambda x: int(hex(x), 16))(img_array)
             images.append(hex_image_array)
-        image_batch=np.stack(images,axis=0)
-        images_tensor = torch.tensor(image_batch, dtype=torch.float32)
-        batches.append(images_tensor)
-        return batches
+        if len(png_file_l)!=0:
+            image_batch=np.stack(images,axis=0)
+            images_tensor = torch.tensor(image_batch, dtype=torch.float32)
+            batches.append(images_tensor)
+            return batches
+        else:
+            return None
     
     # def load_ubyte(self,file_path):
     #     with open(file_path, 'rb') as f:
@@ -109,6 +112,9 @@ class inferencer:
         
         
         output_t=torch.cat(output,dim=0)
+        with open("file_output.txt","a+") as f:
+            f.write(str(output_t))
+        f.close()
         print(output_t)
         #self.model.forward()
 
