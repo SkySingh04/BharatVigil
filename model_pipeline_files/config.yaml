@@ -17,7 +17,7 @@ png_param:
   matrix_size: 784
   trim: True
 mnist_param:
-  mnist_creation: True
+  mnist_creation: False
   mnist_saving_dir: model_pipeline_files/data/mnist/
   png_deletion: False
 model:

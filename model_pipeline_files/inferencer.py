@@ -2,12 +2,12 @@ from model_packet_data import Model
 import argparse
 import yaml
 import torch
-from mnist import MNIST
+# from mnist import MNIST
 import numpy as np
 import glob
 import os
 from PIL import Image
-
+import sys
 def load_config(filename):
 
     try:
@@ -19,15 +19,17 @@ def load_config(filename):
     except yaml.YAMLError as e:
         print(f"Error parsing YAML file: {e}")
         return None
-config = load_config('./config.yaml')
+config = load_config('../config.yaml')
 # parser = argparse.ArgumentParser(description='Pass an argument for model inference')
 # parser.add_argument('input_file',type=str,help="path of the input_file")
-fifo_path ='/tmp/model_queue'
+fifo_path ='/tmp/mnist2model_queue'
+
 if not os.path.exists(fifo_path):
     print(f"Error: FIFO at {fifo_path} does not exist.")
+    sys.exit(0)
 class inferencer:
     def __init__(self):
-      
+        # print(config["model"])
         self.gpu_code=config["model"]["cuda_code"]
         self.model_path=config["model"]["model_dir_packet_data"]
         if self.gpu_code==None:
@@ -113,10 +115,12 @@ class inferencer:
 if __name__=="__main__":
     # args=parser.parse_args()
     inference=inferencer()
-    inference.inference_input("/home/adarshhari/Desktop/BharatVigil/model_pipeline_files/data/pngs/capture_1726292479_session/")
+    #inference.inference_input("")
 
     with open(fifo_path,'r') as fifo:
         while True:
             data=fifo.readline().strip()
-            print(data)
-            inference.inference_input(data)
+           
+            
+            if len(data)!=0:   
+                inference.inference_input(data)

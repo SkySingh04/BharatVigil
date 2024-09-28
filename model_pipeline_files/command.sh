@@ -88,6 +88,7 @@ make_png_mnist(){
      if read pcap_file < $fifo1; then
         echo $pcap_file
         taskset -c 0-$((data_thread-1)) python3 session2png_mnsit.py $pcap_file
+        
       fi
   done
 
