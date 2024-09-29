@@ -23,11 +23,15 @@ firewall:
     blocked_domains:
     - shady.com
     blocked_ips:
-    - 13.69.116.109
     - 35.174.127.31
     - 142.251.42.14
     - 192.168.0.1
+    - 52.168.117.175
+    - 142.250.77.182
+    - 51.105.71.136
+    - 117.18.232.200
     - 103.57.86.142
+    - 13.69.116.109
     - 10.0.0.1
     - 31.13.79.35
     id: 1
@@ -61,7 +65,7 @@ logging:
 mnist_param:
   mnist_creation: true
   mnist_saving_dir: ../model_pipeline_files/data/mnist/
-  png_deletion: false
+  png_deletion: true
 model:
   batch_size: 64
   cuda_code: cpu
@@ -82,7 +86,7 @@ network:
   self_signed_tls_cert: /path/to/self-signed-cert.pem
 png_param:
   matrix_size: 784
-  pcap_deletion: false
+  pcap_deletion: true
   png_saving_dir: ../model_pipeline_files/data/pngs/
   png_size: 28
   python_file_loc: ../model_pipeline_files/session2png_mnsit.py
