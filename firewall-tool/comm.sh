@@ -1,3 +1,4 @@
+#!/bin/bash
 # listen_packets(){
 # time=10
 # while true; do

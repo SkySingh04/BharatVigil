@@ -1,5 +1,5 @@
 import Image from "next/image";
-import DashBoard from "./Components/Dashboard";
+import DashBoard from "./Components/DashBoard";
 
 
 

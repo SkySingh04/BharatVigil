@@ -264,7 +264,8 @@ func StartTshark(outputFile string) error {
 
 	// cmd := exec.Command("sudo", "tshark", "-P", "-w", outputFile, "-F", "pcap")
 	//execute a comm.sh file
-	cmd := exec.Command("sh", "./comm.sh")
+	cmd := exec.Command("./comm.sh")
+	
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return fmt.Errorf("failed to get stdout pipe: %v", err)
