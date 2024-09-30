@@ -1,6 +1,6 @@
 
 # Model directory
-model_pipeline_files/models/packet_data/model1.pth
+
 
 #pycache 
 model_pipeline_files/__pycache__
